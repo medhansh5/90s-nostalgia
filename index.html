@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>~*~ Welcome To My Homepage ~*~</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Special+Elite&display=swap');
+
+  :root {
+    --teal: #008080;
+    --silver: #c0c0c0;
+    --dark: #000080;
+    --lime: #00ff00;
+    --pink: #ff69b4;
+    --yellow: #ffff00;
+    --red: #ff0000;
+    --white: #ffffff;
+    --black: #000000;
+    --gray-dark: #808080;
+    --gray-light: #dfdfdf;
+    --win-bg: #c0c0c0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; image-rendering: pixelated; }
+
+  body {
+    background-color: var(--teal);
+    background-image: 
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+    font-family: 'VT323', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpolygon points='0,0 0,16 4,12 8,20 10,19 6,11 12,11' fill='white' stroke='black' stroke-width='1'/%3E%3C/svg%3E"), auto;
+  }
+
+  /* BOOT SCREEN */
+  #boot-screen {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'VT323', monospace;
+    color: var(--lime);
+    font-size: 20px;
+  }
+  #boot-screen .boot-logo {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(12px, 3vw, 22px);
+    color: var(--lime);
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px #00ff00;
+    animation: flicker 0.15s infinite alternate;
+  }
+  @keyframes flicker { from { opacity: 1; } to { opacity: 0.85; } }
+  #boot-progress-bar {
+    width: 300px;
+    height: 20px;
+    border: 2px solid var(--lime);
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  #boot-progress-fill {
+    height: 100%;
+    background: var(--lime);
+    width: 0%;
+    transition: width 0.05s linear;
+    box-shadow: 0 0 8px #00ff00;
+  }
+  #boot-text { font-size: 16px; margin-top: 10px; color: #aaa; min-height: 22px; }
+
+  /* TASKBAR */
+  #taskbar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 36px;
+    background: var(--silver);
+    border-top: 2px solid var(--white);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 4px;
+    z-index: 1000;
+    box-shadow: 0 -1px 0 var(--gray-dark);
+  }
+  #start-btn {
+    background: var(--silver);
+    border: 2px outset var(--white);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    padding: 2px 8px;
+    cursor: pointer;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  #start-btn:active { border-style: inset; }
+  #taskbar-time {
+    margin-left: auto;
+    border: 1px inset var(--gray-dark);
+    padding: 2px 8px;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    min-width: 60px;
+    text-align: center;
+    background: var(--silver);
+  }
+  .taskbar-item {
+    background: var(--silver);
+    border: 2px outset var(--white);
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    padding: 1px 8px;
+    cursor: pointer;
+    height: 28px;
+    display: flex;
+    align-items: center;
+  }
+  .taskbar-item.active { border-style: inset; background: #aaa; }
+
+  /* WINDOWS */
+  .win {
+    position: absolute;
+    background: var(--silver);
+    border: 2px outset var(--white);
+    min-width: 200px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+    display: none;
+  }
+  .win.open { display: block; }
+  .win-titlebar {
+    background: linear-gradient(to right, var(--dark), #1084d0);
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    padding: 4px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: move;
+    user-select: none;
+  }
+  .win-title-text { display: flex; align-items: center; gap: 6px; }
+  .win-controls { display: flex; gap: 2px; }
+  .win-btn {
+    width: 16px; height: 14px;
+    background: var(--silver);
+    border: 1px outset var(--white);
+    font-size: 8px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-family: 'VT323', monospace;
+    line-height: 1;
+  }
+  .win-btn:active { border-style: inset; }
+  .win-body {
+    padding: 8px;
+    overflow: auto;
+  }
+  .win-menubar {
+    border-bottom: 1px solid var(--gray-dark);
+    padding: 2px 4px;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    display: flex; gap: 8px;
+    background: var(--silver);
+  }
+  .win-menubar span { cursor: pointer; padding: 0 4px; }
+  .win-menubar span:hover { background: var(--dark); color: white; }
+
+  /* STATUS BAR */
+  .win-statusbar {
+    border-top: 1px solid var(--gray-dark);
+    padding: 2px 6px;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: #333;
+    display: flex; gap: 8px;
+  }
+  .status-panel {
+    border: 1px inset var(--gray-dark);
+    padding: 0 6px;
+    flex: 1;
+  }
+
+  /* DESKTOP ICONS */
+  #desktop-icons {
+    position: absolute;
+    top: 10px; left: 10px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .icon {
+    display: flex; flex-direction: column; align-items: center;
+    cursor: pointer; width: 64px; text-align: center;
+    color: white; font-family: 'VT323', monospace; font-size: 14px;
+  }
+  .icon .icon-img {
+    font-size: 32px; margin-bottom: 2px;
+    filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5));
+  }
+  .icon:hover .icon-img { filter: brightness(1.3) drop-shadow(2px 2px 0 rgba(0,0,0,0.5)); }
+  .icon span {
+    background: transparent;
+    padding: 1px 2px;
+    text-shadow: 1px 1px 2px black;
+  }
+  .icon:hover span { background: var(--dark); }
+
+  /* MARQUEE */
+  .marquee-bar {
+    background: var(--black);
+    color: var(--yellow);
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    padding: 4px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border-top: 2px solid var(--yellow);
+    border-bottom: 2px solid var(--yellow);
+    margin-bottom: 8px;
+  }
+  .marquee-inner {
+    display: inline-block;
+    animation: scroll-left 20s linear infinite;
+  }
+  @keyframes scroll-left {
+    from { transform: translateX(100vw); }
+    to { transform: translateX(-100%); }
+  }
+
+  /* GUESTBOOK */
+  .guestbook-entry {
+    border: 1px inset var(--gray-dark);
+    padding: 6px;
+    margin-bottom: 6px;
+    background: white;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+  }
+  .guestbook-entry .from { font-weight: bold; color: var(--dark); }
+  .guestbook-entry .msg { color: #333; margin-top: 2px; }
+  .guestbook-entry .date { color: var(--gray-dark); font-size: 13px; }
+
+  /* MEDIA PLAYER */
+  .vis-bar-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 60px;
+    background: black;
+    padding: 4px;
+    border: 2px inset var(--gray-dark);
+    margin-bottom: 8px;
+  }
+  .vis-bar {
+    flex: 1;
+    background: linear-gradient(to top, var(--lime), var(--yellow), var(--red));
+    min-height: 4px;
+    transition: height 0.1s;
+  }
+
+  /* FORTUNE */
+  #fortune-text {
+    font-family: 'Special Elite', monospace;
+    font-size: 18px;
+    padding: 10px;
+    background: white;
+    border: 1px inset var(--gray-dark);
+    min-height: 80px;
+    color: var(--dark);
+    line-height: 1.4;
+  }
+
+  /* UNDER CONSTRUCTION */
+  .construction-gif {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px;
+    font-size: 30px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { from { rotate: 0deg; } to { rotate: 360deg; } }
+
+  /* WIN SIZES & POSITIONS */
+  #win-welcome { width: 420px; left: 80px; top: 40px; }
+  #win-music   { width: 260px; left: 520px; top: 40px; }
+  #win-guest   { width: 320px; left: 520px; top: 320px; }
+  #win-fortune { width: 280px; left: 80px; top: 340px; }
+
+  /* FORM INPUTS */
+  input[type=text], textarea {
+    border: 2px inset var(--gray-dark);
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    padding: 2px 4px;
+    background: white;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+  textarea { resize: vertical; height: 50px; }
+  button.win95-btn {
+    background: var(--silver);
+    border: 2px outset var(--white);
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    padding: 2px 12px;
+    cursor: pointer;
+  }
+  button.win95-btn:active { border-style: inset; }
+
+  /* HIT COUNTER */
+  .hit-counter {
+    font-family: 'VT323', monospace;
+    font-size: 28px;
+    background: black;
+    color: var(--lime);
+    padding: 4px 10px;
+    letter-spacing: 4px;
+    border: 2px inset #333;
+    display: inline-block;
+  }
+
+  /* RAINBOW TEXT */
+  .rainbow { 
+    background: linear-gradient(to right, red,orange,yellow,green,blue,violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+  }
+
+  /* SCROLL BAR retro */
+  ::-webkit-scrollbar { width: 16px; }
+  ::-webkit-scrollbar-track { background: var(--silver); border-left: 1px solid #666; }
+  ::-webkit-scrollbar-thumb { background: var(--silver); border: 2px outset white; }
+
+  /* START MENU */
+  #start-menu {
+    position: fixed;
+    bottom: 36px; left: 0;
+    width: 200px;
+    background: var(--silver);
+    border: 2px outset var(--white);
+    display: none;
+    z-index: 2000;
+    box-shadow: 4px 0 4px rgba(0,0,0,0.5);
+  }
+  #start-menu.open { display: block; }
+  .start-sidebar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 28px;
+    background: linear-gradient(to top, var(--dark), #1084d0);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 2px;
+  }
+  .start-items { margin-left: 28px; }
+  .start-item {
+    padding: 6px 10px;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer;
+  }
+  .start-item:hover { background: var(--dark); color: white; }
+  .start-divider { border-top: 1px solid var(--gray-dark); margin: 2px 4px; }
+
+  /* BLINK */
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .blink { animation: blink 1s step-end infinite; }
+
+  /* ERROR DIALOG */
+  #error-dlg {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5000;
+    display: none;
+  }
+  #error-dlg.open { display: block; }
+  #error-dlg .win-body { min-width: 260px; }
+
+  /* MATRIX */
+  #matrix-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
+  }
+  #matrix-canvas.active { opacity: 0.08; }
+
+  /* Scrollable guestbook list */
+  #guestbook-list {
+    max-height: 140px;
+    overflow-y: auto;
+  }
+
+  /* Desktop area (above taskbar) */
+  #desktop {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 36px);
+    overflow: hidden;
+  }
+</style>
+</head>
+<body>
+
+<!-- BOOT SCREEN -->
+<div id="boot-screen">
+  <div class="boot-logo">WINDOWS 95<br><span style="font-size:0.5em;color:#aaa">Microsoft Corporation</span></div>
+  <div style="font-size:16px;color:#aaa;margin-bottom:20px;">Starting Windows 95...</div>
+  <div id="boot-progress-bar"><div id="boot-progress-fill"></div></div>
+  <div id="boot-text">Loading system files...</div>
+</div>
+
+<!-- MATRIX RAIN -->
+<canvas id="matrix-canvas"></canvas>
+
+<!-- DESKTOP -->
+<div id="desktop">
+
+  <!-- DESKTOP ICONS -->
+  <div id="desktop-icons">
+    <div class="icon" ondblclick="openWin('win-welcome')">
+      <div class="icon-img">🌐</div><span>My Homepage</span>
+    </div>
+    <div class="icon" ondblclick="openWin('win-music')">
+      <div class="icon-img">🎵</div><span>Winamp</span>
+    </div>
+    <div class="icon" ondblclick="openWin('win-guest')">
+      <div class="icon-img">📖</div><span>Guestbook</span>
+    </div>
+    <div class="icon" ondblclick="openWin('win-fortune')">
+      <div class="icon-img">🔮</div><span>Fortune Teller</span>
+    </div>
+    <div class="icon" ondblclick="throwError()">
+      <div class="icon-img">🗑️</div><span>Recycle Bin</span>
+    </div>
+  </div>
+
+  <!-- WELCOME WINDOW -->
+  <div class="win open" id="win-welcome">
+    <div class="win-titlebar" onmousedown="dragStart(event,'win-welcome')">
+      <div class="win-title-text">🌐 <span>Welcome To My Homepage!!!!</span></div>
+      <div class="win-controls">
+        <div class="win-btn" onclick="minWin('win-welcome')">_</div>
+        <div class="win-btn">□</div>
+        <div class="win-btn" onclick="closeWin('win-welcome')">✕</div>
+      </div>
+    </div>
+    <div class="win-menubar">
+      <span>File</span><span>Edit</span><span>View</span><span>Help</span>
+    </div>
+    <div class="win-body">
+      <div class="marquee-bar">
+        <div class="marquee-inner">
+          ★ BEST VIEWED IN NETSCAPE NAVIGATOR 4.0 800x600 ★ &nbsp;&nbsp;&nbsp; ✨ YOU ARE VISITOR NUMBER <span id="hit-num">001337</span> ✨ &nbsp;&nbsp;&nbsp; 🚧 SITE UNDER CONSTRUCTION 🚧 &nbsp;&nbsp;&nbsp; ★ SIGN MY GUESTBOOK ★ &nbsp;&nbsp;&nbsp;
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-bottom:10px;">
+        <div class="rainbow">~*~ WELCOME TO MY HOMEPAGE ~*~</div>
+        <br>
+        <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--dark);margin-top:4px;">
+          Est. 1997 &nbsp;|&nbsp; Made with ❤️ &amp; MS Paint
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
+        <div style="font-size:36px;animation:spin 3s linear infinite">🌀</div>
+        <div style="font-family:'VT323',monospace;font-size:17px;color:var(--dark);line-height:1.5;">
+          Hey there! Welcome to the COOLEST page on the whole internet!! 
+          I made this page because the internet is RAD and I wanted to share 
+          my love of Tamagotchis, Backstreet Boys, and AOL Instant Messenger!! 
+          Don't forget to sign my guestbook and add me to your buddy list! 
+          A/S/L??
+        </div>
+      </div>
+
+      <hr style="border:1px inset var(--gray-dark);margin:8px 0;">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;font-family:'VT323',monospace;font-size:16px;">
+        <div>
+          <div>👾 Tamagotchi fan since '97</div>
+          <div>🎮 Plays: Pokémon Red</div>
+          <div>🎵 Listening to: Spice Girls</div>
+          <div>💌 AIM: xX_CoolKid97_Xx</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:12px;margin-bottom:4px;">Visitors:</div>
+          <div class="hit-counter" id="hit-counter-display">001338</div>
+        </div>
+      </div>
+
+      <hr style="border:1px inset var(--gray-dark);margin:8px 0;">
+      <div style="font-family:'VT323',monospace;font-size:14px;color:var(--gray-dark);text-align:center;">
+        <span class="blink">★</span> This page uses FRAMES and JAVASCRIPT <span class="blink">★</span><br>
+        &lt;bgsound src="myspace_song.mid" loop="infinite"&gt;
+      </div>
+    </div>
+    <div class="win-statusbar">
+      <div class="status-panel">Done</div>
+      <div class="status-panel">Internet zone</div>
+    </div>
+  </div>
+
+  <!-- WINAMP WINDOW -->
+  <div class="win open" id="win-music">
+    <div class="win-titlebar" onmousedown="dragStart(event,'win-music')">
+      <div class="win-title-text">🎵 <span>WINAMP v2.9</span></div>
+      <div class="win-controls">
+        <div class="win-btn" onclick="minWin('win-music')">_</div>
+        <div class="win-btn">□</div>
+        <div class="win-btn" onclick="closeWin('win-music')">✕</div>
+      </div>
+    </div>
+    <div class="win-body" style="background:#1a1a1a;color:var(--lime);padding:10px;">
+      <div style="font-family:'VT323',monospace;font-size:14px;color:#888;margin-bottom:4px;">NOW PLAYING:</div>
+      <div style="font-family:'VT323',monospace;font-size:18px;color:var(--lime);white-space:nowrap;overflow:hidden;border:1px inset #333;padding:3px 6px;background:black;margin-bottom:6px;">
+        <span id="track-scroll"></span>
+      </div>
+      <!-- VIS BARS -->
+      <div class="vis-bar-container" id="visualizer"></div>
+      <!-- CONTROLS -->
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
+        <button class="win95-btn" onclick="prevTrack()">⏮</button>
+        <button class="win95-btn" id="play-btn" onclick="togglePlay()">▶</button>
+        <button class="win95-btn" onclick="nextTrack()">⏭</button>
+        <button class="win95-btn" onclick="shuffleTrack()">🔀</button>
+      </div>
+      <!-- PLAYLIST -->
+      <div style="font-family:'VT323',monospace;font-size:13px;color:#888;border-top:1px solid #333;padding-top:6px;">
+        PLAYLIST:
+      </div>
+      <div id="playlist" style="font-family:'VT323',monospace;font-size:14px;max-height:90px;overflow-y:auto;"></div>
+    </div>
+  </div>
+
+  <!-- GUESTBOOK WINDOW -->
+  <div class="win open" id="win-guest">
+    <div class="win-titlebar" onmousedown="dragStart(event,'win-guest')">
+      <div class="win-title-text">📖 <span>My Guestbook</span></div>
+      <div class="win-controls">
+        <div class="win-btn" onclick="minWin('win-guest')">_</div>
+        <div class="win-btn">□</div>
+        <div class="win-btn" onclick="closeWin('win-guest')">✕</div>
+      </div>
+    </div>
+    <div class="win-menubar"><span>File</span><span>Sign!</span></div>
+    <div class="win-body">
+      <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--dark);margin-bottom:8px;">✍️ Sign My Guestbook!</div>
+      <input type="text" id="gb-name" placeholder="Your name / AIM handle">
+      <textarea id="gb-msg" placeholder="Leave a message! A/S/L?"></textarea>
+      <button class="win95-btn" onclick="signGuestbook()">Sign It! 🖊️</button>
+      <hr style="border:1px inset var(--gray-dark);margin:8px 0;">
+      <div id="guestbook-list"></div>
+    </div>
+  </div>
+
+  <!-- FORTUNE TELLER -->
+  <div class="win open" id="win-fortune">
+    <div class="win-titlebar" onmousedown="dragStart(event,'win-fortune')">
+      <div class="win-title-text">🔮 <span>Magic 8 Ball Fortune Teller</span></div>
+      <div class="win-controls">
+        <div class="win-btn" onclick="minWin('win-fortune')">_</div>
+        <div class="win-btn">□</div>
+        <div class="win-btn" onclick="closeWin('win-fortune')">✕</div>
+      </div>
+    </div>
+    <div class="win-body" style="text-align:center;">
+      <div style="font-size:64px;margin-bottom:8px;cursor:pointer;transition:transform 0.2s;" id="ball" onclick="shakeBall()" title="Click to shake!">🎱</div>
+      <div style="font-family:'VT323',monospace;font-size:14px;color:var(--gray-dark);margin-bottom:6px;">Click the ball to reveal your fortune...</div>
+      <div id="fortune-text" style="font-family:'VT323',monospace;font-size:22px;color:var(--dark);padding:10px;background:white;border:1px inset var(--gray-dark);min-height:60px;display:flex;align-items:center;justify-content:center;">Ask a question first!</div>
+      <br>
+      <button class="win95-btn" onclick="shakeBall()" style="margin-top:4px;">🔮 Shake Again</button>
+    </div>
+  </div>
+
+  <!-- ERROR DIALOG -->
+  <div id="error-dlg">
+    <div class="win open" style="width:300px;">
+      <div class="win-titlebar">
+        <div class="win-title-text">⚠️ <span>Fatal Error</span></div>
+        <div class="win-controls">
+          <div class="win-btn" onclick="closeError()">✕</div>
+        </div>
+      </div>
+      <div class="win-body">
+        <div style="display:flex;gap:12px;align-items:flex-start;font-family:'VT323',monospace;font-size:16px;margin-bottom:12px;">
+          <div style="font-size:36px;">⛔</div>
+          <div>
+            <b>Windows has encountered a fatal error.</b><br><br>
+            <span id="error-msg">RECYCLE BIN IS FULL<br>Please empty it and try again.</span><br><br>
+            <span style="font-size:13px;color:var(--gray-dark)">Error code: 0x0000001A 💀</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;justify-content:center;">
+          <button class="win95-btn" onclick="closeError()">OK</button>
+          <button class="win95-btn" onclick="closeError()">Cancel</button>
+          <button class="win95-btn" onclick="spawnErrors()">Ignore</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- START MENU -->
+  <div id="start-menu">
+    <div class="start-sidebar">Windows 95</div>
+    <div class="start-items">
+      <div class="start-item" onclick="openWin('win-welcome')">🌐 My Homepage</div>
+      <div class="start-item" onclick="openWin('win-music')">🎵 Winamp</div>
+      <div class="start-item" onclick="openWin('win-guest')">📖 Guestbook</div>
+      <div class="start-item" onclick="openWin('win-fortune')">🔮 Fortune Teller</div>
+      <div class="start-divider"></div>
+      <div class="start-item" onclick="toggleMatrix()">💚 Matrix Mode</div>
+      <div class="start-item" onclick="throwError()">💥 Crash Windows</div>
+      <div class="start-divider"></div>
+      <div class="start-item" onclick="toggleStartMenu()">🔌 Shut Down...</div>
+    </div>
+  </div>
+
+</div><!-- end #desktop -->
+
+<!-- TASKBAR -->
+<div id="taskbar">
+  <button id="start-btn" onclick="toggleStartMenu()">
+    <span style="font-size:14px">🪟</span> Start
+  </button>
+  <div class="taskbar-item active" id="tb-welcome" onclick="toggleWin('win-welcome')">🌐 Homepage</div>
+  <div class="taskbar-item active" id="tb-music" onclick="toggleWin('win-music')">🎵 Winamp</div>
+  <div class="taskbar-item active" id="tb-guest" onclick="toggleWin('win-guest')">📖 Guestbook</div>
+  <div class="taskbar-item active" id="tb-fortune" onclick="toggleWin('win-fortune')">🔮 Fortune</div>
+  <div id="taskbar-time">12:00</div>
+</div>
+
+<script>
+// ============ BOOT SEQUENCE ============
+const bootMessages = [
+  'Loading system files...',
+  'Initializing hardware...',
+  'Checking memory... 640K OK',
+  'Loading Windows 95...',
+  'Starting real-mode drivers...',
+  'Initializing device manager...',
+  'Loading explorer.exe...',
+  'Welcome!'
+];
+let bootIdx = 0;
+const fill = document.getElementById('boot-progress-fill');
+const bootTxt = document.getElementById('boot-text');
+function bootStep() {
+  if (bootIdx < bootMessages.length) {
+    bootTxt.textContent = bootMessages[bootIdx];
+    fill.style.width = ((bootIdx + 1) / bootMessages.length * 100) + '%';
+    bootIdx++;
+    setTimeout(bootStep, bootIdx === bootMessages.length ? 600 : 350);
+  } else {
+    document.getElementById('boot-screen').style.transition = 'opacity 0.8s';
+    document.getElementById('boot-screen').style.opacity = '0';
+    setTimeout(() => document.getElementById('boot-screen').style.display = 'none', 800);
+  }
+}
+setTimeout(bootStep, 800);
+
+// ============ CLOCK ============
+function updateClock() {
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2,'0');
+  const m = now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('taskbar-time').textContent = `${h}:${m}`;
+}
+updateClock(); setInterval(updateClock, 10000);
+
+// ============ HIT COUNTER ============
+let hits = 1338;
+setInterval(() => {
+  hits++;
+  document.getElementById('hit-num').textContent = String(hits).padStart(6,'0');
+  document.getElementById('hit-counter-display').textContent = String(hits).padStart(6,'0');
+}, 15000);
+
+// ============ DRAG ============
+let dragging = null, ox=0, oy=0;
+function dragStart(e, id) {
+  dragging = document.getElementById(id);
+  bringToFront(id);
+  ox = e.clientX - dragging.offsetLeft;
+  oy = e.clientY - dragging.offsetTop;
+  document.addEventListener('mousemove', onDrag);
+  document.addEventListener('mouseup', dragEnd);
+}
+function onDrag(e) {
+  if (!dragging) return;
+  dragging.style.left = (e.clientX - ox) + 'px';
+  dragging.style.top  = Math.max(0, e.clientY - oy) + 'px';
+}
+function dragEnd() {
+  dragging = null;
+  document.removeEventListener('mousemove', onDrag);
+  document.removeEventListener('mouseup', dragEnd);
+}
+
+let zTop = 100;
+function bringToFront(id) {
+  document.getElementById(id).style.zIndex = ++zTop;
+}
+
+// ============ WINDOW OPS ============
+function openWin(id) {
+  const w = document.getElementById(id);
+  w.classList.add('open');
+  bringToFront(id);
+  const tbId = 'tb-' + id.replace('win-','');
+  const tb = document.getElementById(tbId);
+  if (tb) tb.classList.add('active');
+}
+function closeWin(id) {
+  document.getElementById(id).classList.remove('open');
+  const tbId = 'tb-' + id.replace('win-','');
+  const tb = document.getElementById(tbId);
+  if (tb) tb.classList.remove('active');
+}
+function minWin(id) { closeWin(id); }
+function toggleWin(id) {
+  const w = document.getElementById(id);
+  if (w.classList.contains('open')) { closeWin(id); } else { openWin(id); }
+}
+
+// ============ START MENU ============
+function toggleStartMenu() {
+  document.getElementById('start-menu').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#start-menu') && !e.target.closest('#start-btn')) {
+    document.getElementById('start-menu').classList.remove('open');
+  }
+});
+
+// ============ MUSIC PLAYER ============
+const tracks = [
+  '01. Backstreet Boys - Everybody',
+  '02. Spice Girls - Wannabe',
+  '03. *NSYNC - Bye Bye Bye',
+  '04. Aqua - Barbie Girl',
+  '05. Savage Garden - Truly Madly',
+  '06. TLC - No Scrubs',
+  '07. Destiny\'s Child - Say My Name',
+  '08. Smash Mouth - All Star',
+];
+let currentTrack = 0;
+let playing = false;
+let visInterval = null;
+let scrollInterval = null;
+
+const playlistEl = document.getElementById('playlist');
+tracks.forEach((t,i) => {
+  const div = document.createElement('div');
+  div.id = 'track-' + i;
+  div.textContent = t;
+  div.style.cssText = 'padding:2px 4px;cursor:pointer;color:#888;';
+  div.onclick = () => { currentTrack = i; startPlay(); };
+  playlistEl.appendChild(div);
+});
+
+function highlightTrack() {
+  tracks.forEach((_,i) => {
+    const el = document.getElementById('track-'+i);
+    if (el) el.style.color = i === currentTrack ? '#00ff00' : '#888';
+  });
+}
+
+function startPlay() {
+  playing = true;
+  document.getElementById('play-btn').textContent = '⏸';
+  highlightTrack();
+  clearInterval(scrollInterval);
+  let full = '   ' + tracks[currentTrack] + '   ';
+  let pos = 0;
+  document.getElementById('track-scroll').textContent = full;
+  scrollInterval = setInterval(() => {
+    pos = (pos + 1) % full.length;
+    document.getElementById('track-scroll').textContent = full.slice(pos) + full.slice(0, pos);
+  }, 150);
+  startVis();
+}
+
+function togglePlay() {
+  playing = !playing;
+  document.getElementById('play-btn').textContent = playing ? '⏸' : '▶';
+  if (playing) { startPlay(); } else { stopVis(); clearInterval(scrollInterval); }
+}
+function prevTrack() { currentTrack = (currentTrack - 1 + tracks.length) % tracks.length; startPlay(); }
+function nextTrack() { currentTrack = (currentTrack + 1) % tracks.length; startPlay(); }
+function shuffleTrack() { currentTrack = Math.floor(Math.random() * tracks.length); startPlay(); }
+
+// Visualizer
+function buildVis() {
+  const vis = document.getElementById('visualizer');
+  vis.innerHTML = '';
+  for (let i = 0; i < 20; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'vis-bar';
+    bar.style.height = '4px';
+    vis.appendChild(bar);
+  }
+}
+buildVis();
+function startVis() {
+  clearInterval(visInterval);
+  visInterval = setInterval(() => {
+    const bars = document.querySelectorAll('.vis-bar');
+    bars.forEach(b => {
+      b.style.height = (Math.random() * 52 + 4) + 'px';
+    });
+  }, 120);
+}
+function stopVis() {
+  clearInterval(visInterval);
+  document.querySelectorAll('.vis-bar').forEach(b => b.style.height = '4px');
+}
+
+// Auto-start
+setTimeout(() => { startPlay(); }, 2000);
+
+// ============ GUESTBOOK ============
+const initialEntries = [
+  { name: 'SkaterBoi99', msg: 'FIRST!! ur site is totally rad!! add me on AIM!! 😎', date: 'Jan 12, 1999' },
+  { name: 'TamagotchiQueen', msg: 'omg i love your site!! backstreet boys 4ever!! 💖', date: 'Mar 3, 1999' },
+  { name: 'xXNightCrawlerXx', msg: 'sup found ur site on webring. coolest page ever!!', date: 'Jul 7, 1999' },
+];
+
+function renderGuestbook(entries) {
+  const list = document.getElementById('guestbook-list');
+  list.innerHTML = '';
+  [...entries].reverse().forEach(e => {
+    const div = document.createElement('div');
+    div.className = 'guestbook-entry';
+    div.innerHTML = `<div class="from">✍️ ${e.name}</div><div class="msg">${e.msg}</div><div class="date">${e.date}</div>`;
+    list.appendChild(div);
+  });
+}
+let entries = [...initialEntries];
+renderGuestbook(entries);
+
+function signGuestbook() {
+  const name = document.getElementById('gb-name').value.trim();
+  const msg  = document.getElementById('gb-msg').value.trim();
+  if (!name || !msg) { throwError('Please fill in your name and message!'); return; }
+  entries.push({ name, msg, date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) });
+  renderGuestbook(entries);
+  document.getElementById('gb-name').value = '';
+  document.getElementById('gb-msg').value = '';
+  hits++;
+  document.getElementById('hit-counter-display').textContent = String(hits).padStart(6,'0');
+}
+
+// ============ FORTUNE ============
+const fortunes = [
+  'Your Tamagotchi will outlive us all. 🐣',
+  'You will receive a message on AIM tonight... maybe. 💬',
+  'The answer is: IT IS CERTAIN. Press CTRL+ALT+DEL to continue.',
+  'Someone has you on their Top 8. 💖',
+  'Windows will crash before the day is done. (Already true.)',
+  'Your floppy disk has important data. Back it up!!! 💾',
+  'All signs point to: YOU ROCK! 🤘',
+  'Cannot predict now... have you tried turning it off and on again?',
+  'You will find the perfect MP3 on Napster today. 🎵',
+  'My sources say YES. And also: WELCOME TO MYSPACE.',
+  'Concentrate and ask again... after rebooting.',
+  'Outlook not so good. Try defragging your soul.',
+];
+function shakeBall() {
+  const ball = document.getElementById('ball');
+  ball.style.transform = 'scale(0.8) rotate(20deg)';
+  setTimeout(() => {
+    ball.style.transform = 'scale(1.1) rotate(-10deg)';
+    setTimeout(() => {
+      ball.style.transform = 'scale(1) rotate(0)';
+      const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+      document.getElementById('fortune-text').textContent = '🔮 ' + fortune;
+    }, 200);
+  }, 150);
+}
+
+// ============ ERROR ============
+let errorCount = 0;
+function throwError(msg) {
+  document.getElementById('error-dlg').classList.add('open');
+  document.getElementById('error-msg').innerHTML = msg || 'RECYCLE BIN IS FULL<br>Please empty it and try again.';
+}
+function closeError() {
+  document.getElementById('error-dlg').classList.remove('open');
+  errorCount = 0;
+}
+function spawnErrors() {
+  errorCount++;
+  if (errorCount > 3) {
+    document.getElementById('error-msg').innerHTML = 'TOO MANY ERRORS<br>Please restart your computer.<br><br><b>This is fine. 🔥</b>';
+  } else {
+    const msgs = [
+      'NOT ENOUGH MEMORY<br>Close some programs.',
+      'GENERAL PROTECTION FAULT<br>in module COOLHOMEPAGE.EXE',
+      'ILLEGAL OPERATION<br>You cannot do that on this computer.',
+      'KERNEL PANIC<br>Your vibes are misconfigured.',
+    ];
+    document.getElementById('error-msg').innerHTML = msgs[Math.floor(Math.random()*msgs.length)];
+  }
+}
+
+// ============ MATRIX ============
+let matrixActive = false;
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+let matrixInterval;
+function initMatrix() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+initMatrix();
+window.addEventListener('resize', initMatrix);
+const cols = Math.floor(window.innerWidth / 16);
+const drops = Array(cols).fill(1);
+function drawMatrix() {
+  ctx.fillStyle = 'rgba(0,0,0,0.05)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = '#00ff00';
+  ctx.font = '14px VT323, monospace';
+  drops.forEach((y,i) => {
+    const char = String.fromCharCode(0x30A0 + Math.random()*96);
+    ctx.fillText(char, i*16, y*16);
+    if (y*16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  });
+}
+function toggleMatrix() {
+  matrixActive = !matrixActive;
+  canvas.classList.toggle('active', matrixActive);
+  if (matrixActive) matrixInterval = setInterval(drawMatrix, 50);
+  else { clearInterval(matrixInterval); ctx.clearRect(0,0,canvas.width,canvas.height); }
+  document.getElementById('start-menu').classList.remove('open');
+}
+</script>
+</body>
+</html>
