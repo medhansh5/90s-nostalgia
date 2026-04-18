@@ -27,9 +27,8 @@ Double-click it. Watch it boot. Feel the dial-up nostalgia.
 ## How To Use
 
 ```
-1. Download  →  90s-nostalgia.html
-2. Open      →  Double-click in any file explorer
-3. Enjoy     →  No internet required. No npm install. No vite. Just vibes.
+Go to https://medhansh5.github.io/90s-nostalgia/
+No download required. No npm install. No vite. Just vibes.
 ```
 
 ### Controls
