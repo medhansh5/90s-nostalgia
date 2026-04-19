@@ -4,963 +4,602 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>~*~ Welcome To My Homepage ~*~</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Special+Elite&display=swap');
+:root {
+  --teal: #008080;
+  --silver: #c0c0c0;
+  --navy: #000080;
+  --lime: #00ff41;
+  --yellow: #ffff00;
+  --white: #ffffff;
+  --black: #000000;
+  --gray-dark: #808080;
+  --gray-mid: #aaaaaa;
+  --btn-face: #c0c0c0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--teal);
+  background-image: repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px);
+  font-family: 'VT323', monospace;
+  min-height: 100vh; overflow: hidden; user-select: none;
+}
 
-  :root {
-    --teal: #008080;
-    --silver: #c0c0c0;
-    --dark: #000080;
-    --lime: #00ff00;
-    --pink: #ff69b4;
-    --yellow: #ffff00;
-    --red: #ff0000;
-    --white: #ffffff;
-    --black: #000000;
-    --gray-dark: #808080;
-    --gray-light: #dfdfdf;
-    --win-bg: #c0c0c0;
-  }
+/* BOOT */
+#boot { position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--lime);font-family:'VT323',monospace; }
+.boot-logo { font-family:'Press Start 2P',monospace;font-size:clamp(10px,2.5vw,20px);color:var(--lime);text-align:center;margin-bottom:24px;text-shadow:0 0 12px #00ff41;animation:flicker .2s infinite alternate; }
+@keyframes flicker{from{opacity:1}to{opacity:.88}}
+.boot-bar-wrap { width:320px;height:22px;border:2px solid var(--lime);overflow:hidden; }
+#boot-fill { height:100%;background:var(--lime);width:0;box-shadow:0 0 8px #00ff41;transition:width .08s linear; }
+#boot-msg { font-size:17px;margin-top:10px;color:#888;min-height:22px;text-align:center; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; image-rendering: pixelated; }
+/* DESKTOP */
+#desktop { position:relative;width:100vw;height:calc(100vh - 38px);overflow:hidden; }
 
-  body {
-    background-color: var(--teal);
-    background-image: 
-      repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,0.03) 2px,
-        rgba(0,0,0,0.03) 4px
-      );
-    font-family: 'VT323', monospace;
-    min-height: 100vh;
-    overflow-x: hidden;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpolygon points='0,0 0,16 4,12 8,20 10,19 6,11 12,11' fill='white' stroke='black' stroke-width='1'/%3E%3C/svg%3E"), auto;
-  }
+/* TASKBAR */
+#taskbar { position:fixed;bottom:0;left:0;right:0;height:38px;background:var(--silver);border-top:2px solid var(--white);box-shadow:0 -1px 0 var(--gray-dark);display:flex;align-items:center;gap:3px;padding:0 4px;z-index:8000; }
+#start-btn { height:30px;padding:0 10px;background:var(--btn-face);border:2px outset var(--white);font-family:'Press Start 2P',monospace;font-size:8px;display:flex;align-items:center;gap:5px;cursor:pointer;white-space:nowrap; }
+#start-btn:active { border-style:inset; }
+.tb-btn { height:30px;padding:0 8px;background:var(--btn-face);border:2px outset var(--white);font-family:'VT323',monospace;font-size:16px;display:flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap; }
+.tb-btn.active { border-style:inset;background:var(--gray-mid); }
+#tb-clock { margin-left:auto;border:1px inset var(--gray-dark);padding:2px 10px;font-size:20px;background:var(--silver);min-width:64px;text-align:center; }
 
-  /* BOOT SCREEN */
-  #boot-screen {
-    position: fixed;
-    inset: 0;
-    background: #000;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: 'VT323', monospace;
-    color: var(--lime);
-    font-size: 20px;
-  }
-  #boot-screen .boot-logo {
-    font-family: 'Press Start 2P', monospace;
-    font-size: clamp(12px, 3vw, 22px);
-    color: var(--lime);
-    text-align: center;
-    margin-bottom: 30px;
-    text-shadow: 0 0 10px #00ff00;
-    animation: flicker 0.15s infinite alternate;
-  }
-  @keyframes flicker { from { opacity: 1; } to { opacity: 0.85; } }
-  #boot-progress-bar {
-    width: 300px;
-    height: 20px;
-    border: 2px solid var(--lime);
-    margin-top: 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  #boot-progress-fill {
-    height: 100%;
-    background: var(--lime);
-    width: 0%;
-    transition: width 0.05s linear;
-    box-shadow: 0 0 8px #00ff00;
-  }
-  #boot-text { font-size: 16px; margin-top: 10px; color: #aaa; min-height: 22px; }
+/* START MENU */
+#start-menu { position:fixed;bottom:38px;left:0;width:210px;background:var(--silver);border:2px outset var(--white);box-shadow:4px -2px 6px rgba(0,0,0,.4);display:none;z-index:9000; }
+#start-menu.open { display:block; }
+.sm-sidebar { position:absolute;left:0;top:0;bottom:0;width:30px;background:linear-gradient(to top,var(--navy),#1084d0);writing-mode:vertical-rl;transform:rotate(180deg);color:white;font-family:'Press Start 2P',monospace;font-size:8px;display:flex;align-items:center;justify-content:center;letter-spacing:3px; }
+.sm-items { margin-left:30px; }
+.sm-item { padding:7px 10px;font-family:'VT323',monospace;font-size:19px;display:flex;align-items:center;gap:8px;cursor:pointer; }
+.sm-item:hover { background:var(--navy);color:white; }
+.sm-div { border-top:1px solid var(--gray-dark);margin:3px 6px; }
 
-  /* TASKBAR */
-  #taskbar {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: 36px;
-    background: var(--silver);
-    border-top: 2px solid var(--white);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 0 4px;
-    z-index: 1000;
-    box-shadow: 0 -1px 0 var(--gray-dark);
-  }
-  #start-btn {
-    background: var(--silver);
-    border: 2px outset var(--white);
-    font-family: 'Press Start 2P', monospace;
-    font-size: 9px;
-    padding: 2px 8px;
-    cursor: pointer;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  #start-btn:active { border-style: inset; }
-  #taskbar-time {
-    margin-left: auto;
-    border: 1px inset var(--gray-dark);
-    padding: 2px 8px;
-    font-family: 'VT323', monospace;
-    font-size: 18px;
-    min-width: 60px;
-    text-align: center;
-    background: var(--silver);
-  }
-  .taskbar-item {
-    background: var(--silver);
-    border: 2px outset var(--white);
-    font-family: 'VT323', monospace;
-    font-size: 15px;
-    padding: 1px 8px;
-    cursor: pointer;
-    height: 28px;
-    display: flex;
-    align-items: center;
-  }
-  .taskbar-item.active { border-style: inset; background: #aaa; }
+/* WINDOWS */
+.win { position:absolute;background:var(--silver);border:2px outset var(--white);box-shadow:4px 4px 0 rgba(0,0,0,.45);display:none;min-width:180px; }
+.win.open { display:block; }
+.win-titlebar { background:linear-gradient(to right,var(--navy),#1084d0);color:white;font-family:'Press Start 2P',monospace;font-size:8px;padding:4px 6px;display:flex;align-items:center;justify-content:space-between;cursor:move;user-select:none; }
+.win-title-left { display:flex;align-items:center;gap:6px; }
+.win-ctrls { display:flex;gap:2px; }
+.wcb { width:16px;height:14px;background:var(--silver);border:1px outset var(--white);font-size:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:'VT323',monospace;line-height:1; }
+.wcb:active { border-style:inset; }
+.win-menu { border-bottom:1px solid var(--gray-dark);padding:2px 6px;font-size:17px;display:flex;gap:8px;background:var(--silver); }
+.win-menu span { cursor:pointer;padding:0 4px; }
+.win-menu span:hover { background:var(--navy);color:white; }
+.win-body { padding:8px;overflow:auto; }
+.win-status { border-top:1px solid var(--gray-dark);padding:2px 6px;font-size:16px;color:#444;display:flex;gap:6px; }
+.sp { border:1px inset var(--gray-dark);padding:0 6px;flex:1; }
 
-  /* WINDOWS */
-  .win {
-    position: absolute;
-    background: var(--silver);
-    border: 2px outset var(--white);
-    min-width: 200px;
-    box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
-    display: none;
-  }
-  .win.open { display: block; }
-  .win-titlebar {
-    background: linear-gradient(to right, var(--dark), #1084d0);
-    color: white;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 8px;
-    padding: 4px 6px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: move;
-    user-select: none;
-  }
-  .win-title-text { display: flex; align-items: center; gap: 6px; }
-  .win-controls { display: flex; gap: 2px; }
-  .win-btn {
-    width: 16px; height: 14px;
-    background: var(--silver);
-    border: 1px outset var(--white);
-    font-size: 8px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    font-family: 'VT323', monospace;
-    line-height: 1;
-  }
-  .win-btn:active { border-style: inset; }
-  .win-body {
-    padding: 8px;
-    overflow: auto;
-  }
-  .win-menubar {
-    border-bottom: 1px solid var(--gray-dark);
-    padding: 2px 4px;
-    font-family: 'VT323', monospace;
-    font-size: 16px;
-    display: flex; gap: 8px;
-    background: var(--silver);
-  }
-  .win-menubar span { cursor: pointer; padding: 0 4px; }
-  .win-menubar span:hover { background: var(--dark); color: white; }
+/* POSITIONS */
+#win-home    { width:430px;left:80px;top:30px; }
+#win-music   { width:270px;left:530px;top:30px; }
+#win-guest   { width:330px;left:530px;top:320px; }
+#win-fortune { width:285px;left:80px;top:340px; }
 
-  /* STATUS BAR */
-  .win-statusbar {
-    border-top: 1px solid var(--gray-dark);
-    padding: 2px 6px;
-    font-family: 'VT323', monospace;
-    font-size: 16px;
-    color: #333;
-    display: flex; gap: 8px;
-  }
-  .status-panel {
-    border: 1px inset var(--gray-dark);
-    padding: 0 6px;
-    flex: 1;
-  }
+/* ICONS */
+#icons { position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:18px; }
+.icon { display:flex;flex-direction:column;align-items:center;cursor:pointer;width:66px;text-align:center;color:white;font-size:13px; }
+.icon .ig { font-size:34px;margin-bottom:2px;filter:drop-shadow(2px 2px 0 rgba(0,0,0,.5)); }
+.icon span { text-shadow:1px 1px 2px black;padding:1px 2px; }
+.icon:hover span { background:var(--navy); }
 
-  /* DESKTOP ICONS */
-  #desktop-icons {
-    position: absolute;
-    top: 10px; left: 10px;
-    display: flex; flex-direction: column; gap: 20px;
-  }
-  .icon {
-    display: flex; flex-direction: column; align-items: center;
-    cursor: pointer; width: 64px; text-align: center;
-    color: white; font-family: 'VT323', monospace; font-size: 14px;
-  }
-  .icon .icon-img {
-    font-size: 32px; margin-bottom: 2px;
-    filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5));
-  }
-  .icon:hover .icon-img { filter: brightness(1.3) drop-shadow(2px 2px 0 rgba(0,0,0,0.5)); }
-  .icon span {
-    background: transparent;
-    padding: 1px 2px;
-    text-shadow: 1px 1px 2px black;
-  }
-  .icon:hover span { background: var(--dark); }
+/* MARQUEE */
+.mqbar { background:#000;color:var(--yellow);font-size:19px;padding:3px 0;overflow:hidden;white-space:nowrap;border-top:2px solid var(--yellow);border-bottom:2px solid var(--yellow);margin-bottom:8px; }
+.mqinner { display:inline-block;animation:mqleft 22s linear infinite; }
+@keyframes mqleft{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
 
-  /* MARQUEE */
-  .marquee-bar {
-    background: var(--black);
-    color: var(--yellow);
-    font-family: 'VT323', monospace;
-    font-size: 20px;
-    padding: 4px 0;
-    overflow: hidden;
-    white-space: nowrap;
-    border-top: 2px solid var(--yellow);
-    border-bottom: 2px solid var(--yellow);
-    margin-bottom: 8px;
-  }
-  .marquee-inner {
-    display: inline-block;
-    animation: scroll-left 20s linear infinite;
-  }
-  @keyframes scroll-left {
-    from { transform: translateX(100vw); }
-    to { transform: translateX(-100%); }
-  }
+/* RAINBOW */
+.rainbow { background:linear-gradient(to right,red,orange,yellow,green,blue,violet);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Press Start 2P',monospace;font-size:9px; }
 
-  /* GUESTBOOK */
-  .guestbook-entry {
-    border: 1px inset var(--gray-dark);
-    padding: 6px;
-    margin-bottom: 6px;
-    background: white;
-    font-family: 'VT323', monospace;
-    font-size: 16px;
-  }
-  .guestbook-entry .from { font-weight: bold; color: var(--dark); }
-  .guestbook-entry .msg { color: #333; margin-top: 2px; }
-  .guestbook-entry .date { color: var(--gray-dark); font-size: 13px; }
+/* HIT CTR */
+.hitctr { font-size:26px;background:black;color:var(--lime);padding:3px 10px;letter-spacing:5px;border:2px inset #333;display:inline-block;font-family:'VT323',monospace; }
 
-  /* MEDIA PLAYER */
-  .vis-bar-container {
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-    height: 60px;
-    background: black;
-    padding: 4px;
-    border: 2px inset var(--gray-dark);
-    margin-bottom: 8px;
-  }
-  .vis-bar {
-    flex: 1;
-    background: linear-gradient(to top, var(--lime), var(--yellow), var(--red));
-    min-height: 4px;
-    transition: height 0.1s;
-  }
+/* GUESTBOOK */
+.gb-entry { border:1px inset var(--gray-dark);padding:6px;margin-bottom:6px;background:white;font-size:16px; }
+.gb-from { font-weight:bold;color:var(--navy); }
+.gb-msg { color:#333;margin-top:2px; }
+.gb-date { color:var(--gray-dark);font-size:13px; }
+#gb-list { max-height:140px;overflow-y:auto; }
 
-  /* FORTUNE */
-  #fortune-text {
-    font-family: 'Special Elite', monospace;
-    font-size: 18px;
-    padding: 10px;
-    background: white;
-    border: 1px inset var(--gray-dark);
-    min-height: 80px;
-    color: var(--dark);
-    line-height: 1.4;
-  }
+/* FORMS */
+input[type=text],textarea { border:2px inset var(--gray-dark);font-family:'VT323',monospace;font-size:16px;padding:2px 5px;background:white;width:100%;margin-bottom:4px; }
+textarea { resize:vertical;height:50px; }
+.btn95 { background:var(--btn-face);border:2px outset var(--white);font-family:'VT323',monospace;font-size:17px;padding:2px 12px;cursor:pointer; }
+.btn95:active { border-style:inset; }
 
-  /* UNDER CONSTRUCTION */
-  .construction-gif {
-    display: flex; align-items: center; justify-content: center;
-    gap: 8px;
-    font-size: 30px;
-    animation: spin 1s linear infinite;
-  }
-  @keyframes spin { from { rotate: 0deg; } to { rotate: 360deg; } }
+/* PLAYER */
+#player-wrap { background:#1a1a1a;padding:10px; }
+#track-name { font-size:17px;color:var(--lime);background:black;border:1px inset #333;padding:3px 6px;margin-bottom:6px;white-space:nowrap;overflow:hidden;font-family:'VT323',monospace; }
+.vis-wrap { display:flex;align-items:flex-end;gap:2px;height:60px;background:black;padding:4px;border:2px inset #333;margin-bottom:8px; }
+.vbar { flex:1;background:linear-gradient(to top,#00ff00,#ffff00,#ff0000);min-height:4px; }
+.player-ctrls { display:flex;gap:6px;margin-bottom:8px; }
+.player-ctrls .btn95 { font-size:20px; }
+#vol-row { display:flex;align-items:center;gap:6px;font-size:16px;color:#888;font-family:'VT323',monospace;margin-bottom:6px; }
+#vol-slider { flex:1;accent-color:var(--lime);cursor:pointer; }
+#eq-row { display:flex;gap:4px;justify-content:space-between;margin-bottom:4px; }
+.eq-col { display:flex;flex-direction:column;align-items:center;gap:2px; }
+.eq-col label { color:#666;font-size:10px;font-family:'VT323',monospace; }
+.eq-col input[type=range] { writing-mode:vertical-lr;direction:rtl;width:18px;height:48px;accent-color:var(--lime);cursor:pointer; }
+#playlist { font-size:14px;max-height:90px;overflow-y:auto; }
+.ptrack { padding:2px 4px;cursor:pointer;color:#666;font-family:'VT323',monospace; }
+.ptrack.active { color:var(--lime); }
+.ptrack:hover { color:#aaa; }
 
-  /* WIN SIZES & POSITIONS */
-  #win-welcome { width: 420px; left: 80px; top: 40px; }
-  #win-music   { width: 260px; left: 520px; top: 40px; }
-  #win-guest   { width: 320px; left: 520px; top: 320px; }
-  #win-fortune { width: 280px; left: 80px; top: 340px; }
+/* FORTUNE */
+#fortune-out { font-size:20px;color:var(--navy);padding:10px;background:white;border:1px inset var(--gray-dark);min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'VT323',monospace; }
 
-  /* FORM INPUTS */
-  input[type=text], textarea {
-    border: 2px inset var(--gray-dark);
-    font-family: 'VT323', monospace;
-    font-size: 16px;
-    padding: 2px 4px;
-    background: white;
-    width: 100%;
-    margin-bottom: 4px;
-  }
-  textarea { resize: vertical; height: 50px; }
-  button.win95-btn {
-    background: var(--silver);
-    border: 2px outset var(--white);
-    font-family: 'VT323', monospace;
-    font-size: 16px;
-    padding: 2px 12px;
-    cursor: pointer;
-  }
-  button.win95-btn:active { border-style: inset; }
+/* ERROR */
+#err-dlg { position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9500;display:none; }
+#err-dlg.open { display:block; }
+#err-dlg .win { width:310px; }
 
-  /* HIT COUNTER */
-  .hit-counter {
-    font-family: 'VT323', monospace;
-    font-size: 28px;
-    background: black;
-    color: var(--lime);
-    padding: 4px 10px;
-    letter-spacing: 4px;
-    border: 2px inset #333;
-    display: inline-block;
-  }
+/* MATRIX */
+#matrix { position:fixed;inset:0;z-index:-1;opacity:0;pointer-events:none;transition:opacity .5s; }
+#matrix.on { opacity:.1; }
 
-  /* RAINBOW TEXT */
-  .rainbow { 
-    background: linear-gradient(to right, red,orange,yellow,green,blue,violet);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 10px;
-  }
-
-  /* SCROLL BAR retro */
-  ::-webkit-scrollbar { width: 16px; }
-  ::-webkit-scrollbar-track { background: var(--silver); border-left: 1px solid #666; }
-  ::-webkit-scrollbar-thumb { background: var(--silver); border: 2px outset white; }
-
-  /* START MENU */
-  #start-menu {
-    position: fixed;
-    bottom: 36px; left: 0;
-    width: 200px;
-    background: var(--silver);
-    border: 2px outset var(--white);
-    display: none;
-    z-index: 2000;
-    box-shadow: 4px 0 4px rgba(0,0,0,0.5);
-  }
-  #start-menu.open { display: block; }
-  .start-sidebar {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 28px;
-    background: linear-gradient(to top, var(--dark), #1084d0);
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    color: white;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: 2px;
-  }
-  .start-items { margin-left: 28px; }
-  .start-item {
-    padding: 6px 10px;
-    font-family: 'VT323', monospace;
-    font-size: 18px;
-    display: flex; align-items: center; gap: 8px;
-    cursor: pointer;
-  }
-  .start-item:hover { background: var(--dark); color: white; }
-  .start-divider { border-top: 1px solid var(--gray-dark); margin: 2px 4px; }
-
-  /* BLINK */
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-  .blink { animation: blink 1s step-end infinite; }
-
-  /* ERROR DIALOG */
-  #error-dlg {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 5000;
-    display: none;
-  }
-  #error-dlg.open { display: block; }
-  #error-dlg .win-body { min-width: 260px; }
-
-  /* MATRIX */
-  #matrix-canvas {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s;
-  }
-  #matrix-canvas.active { opacity: 0.08; }
-
-  /* Scrollable guestbook list */
-  #guestbook-list {
-    max-height: 140px;
-    overflow-y: auto;
-  }
-
-  /* Desktop area (above taskbar) */
-  #desktop {
-    position: relative;
-    width: 100%;
-    height: calc(100vh - 36px);
-    overflow: hidden;
-  }
+/* MISC */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.blink { animation:blink 1s step-end infinite; }
+@keyframes spin{from{rotate:0deg}to{rotate:360deg}}
+.spin { animation:spin 3s linear infinite;display:inline-block; }
+.led { width:10px;height:10px;border-radius:50%;background:#333;display:inline-block; }
+.led.on { background:var(--lime);box-shadow:0 0 6px var(--lime); }
+::-webkit-scrollbar { width:16px; }
+::-webkit-scrollbar-track { background:var(--silver); }
+::-webkit-scrollbar-thumb { background:var(--silver);border:2px outset white; }
 </style>
 </head>
 <body>
 
-<!-- BOOT SCREEN -->
-<div id="boot-screen">
-  <div class="boot-logo">WINDOWS 95<br><span style="font-size:0.5em;color:#aaa">Microsoft Corporation</span></div>
-  <div style="font-size:16px;color:#aaa;margin-bottom:20px;">Starting Windows 95...</div>
-  <div id="boot-progress-bar"><div id="boot-progress-fill"></div></div>
-  <div id="boot-text">Loading system files...</div>
+<!-- BOOT -->
+<div id="boot">
+  <div class="boot-logo">NetOS '97<br><span style="font-size:.5em;color:#aaa">Surf's Up Edition</span></div>
+  <div style="font-size:16px;color:#666;margin-bottom:18px;">Starting system...</div>
+  <div class="boot-bar-wrap"><div id="boot-fill"></div></div>
+  <div id="boot-msg">Initializing...</div>
 </div>
 
-<!-- MATRIX RAIN -->
-<canvas id="matrix-canvas"></canvas>
+<canvas id="matrix"></canvas>
 
-<!-- DESKTOP -->
 <div id="desktop">
 
-  <!-- DESKTOP ICONS -->
-  <div id="desktop-icons">
-    <div class="icon" ondblclick="openWin('win-welcome')">
-      <div class="icon-img">🌐</div><span>My Homepage</span>
-    </div>
-    <div class="icon" ondblclick="openWin('win-music')">
-      <div class="icon-img">🎵</div><span>Winamp</span>
-    </div>
-    <div class="icon" ondblclick="openWin('win-guest')">
-      <div class="icon-img">📖</div><span>Guestbook</span>
-    </div>
-    <div class="icon" ondblclick="openWin('win-fortune')">
-      <div class="icon-img">🔮</div><span>Fortune Teller</span>
-    </div>
-    <div class="icon" ondblclick="throwError()">
-      <div class="icon-img">🗑️</div><span>Recycle Bin</span>
-    </div>
+  <!-- ICONS -->
+  <div id="icons">
+    <div class="icon" ondblclick="openWin('win-home')"><div class="ig">🌐</div><span>My Homepage</span></div>
+    <div class="icon" ondblclick="openWin('win-music')"><div class="ig">🎵</div><span>SoundBlaster</span></div>
+    <div class="icon" ondblclick="openWin('win-guest')"><div class="ig">📖</div><span>Guestbook</span></div>
+    <div class="icon" ondblclick="openWin('win-fortune')"><div class="ig">🔮</div><span>Fortune.exe</span></div>
+    <div class="icon" ondblclick="crashIt()"><div class="ig">🗑️</div><span>Recycle Bin</span></div>
   </div>
 
-  <!-- WELCOME WINDOW -->
-  <div class="win open" id="win-welcome">
-    <div class="win-titlebar" onmousedown="dragStart(event,'win-welcome')">
-      <div class="win-title-text">🌐 <span>Welcome To My Homepage!!!!</span></div>
-      <div class="win-controls">
-        <div class="win-btn" onclick="minWin('win-welcome')">_</div>
-        <div class="win-btn">□</div>
-        <div class="win-btn" onclick="closeWin('win-welcome')">✕</div>
-      </div>
+  <!-- HOME WINDOW -->
+  <div class="win open" id="win-home">
+    <div class="win-titlebar" onmousedown="drag(event,'win-home')">
+      <div class="win-title-left">🌐 <span>My Homepage – NetBrowser 2.0</span></div>
+      <div class="win-ctrls"><div class="wcb" onclick="minWin('win-home')">_</div><div class="wcb">□</div><div class="wcb" onclick="closeWin('win-home')">✕</div></div>
     </div>
-    <div class="win-menubar">
-      <span>File</span><span>Edit</span><span>View</span><span>Help</span>
-    </div>
+    <div class="win-menu"><span>File</span><span>Edit</span><span>View</span><span>Go</span><span>Help</span></div>
     <div class="win-body">
-      <div class="marquee-bar">
-        <div class="marquee-inner">
-          ★ BEST VIEWED IN NETSCAPE NAVIGATOR 4.0 800x600 ★ &nbsp;&nbsp;&nbsp; ✨ YOU ARE VISITOR NUMBER <span id="hit-num">001337</span> ✨ &nbsp;&nbsp;&nbsp; 🚧 SITE UNDER CONSTRUCTION 🚧 &nbsp;&nbsp;&nbsp; ★ SIGN MY GUESTBOOK ★ &nbsp;&nbsp;&nbsp;
-        </div>
-      </div>
-
+      <div class="mqbar"><div class="mqinner">★ BEST VIEWED AT 800×600 ★ &nbsp;&nbsp; ✨ VISITOR #<span id="hit-inline">001337</span> ✨ &nbsp;&nbsp; 🚧 UNDER CONSTRUCTION 🚧 &nbsp;&nbsp; ★ SIGN MY GUESTBOOK ★ &nbsp;&nbsp; 🎵 TURN UP YOUR SPEAKERS 🎵 &nbsp;&nbsp;</div></div>
       <div style="text-align:center;margin-bottom:10px;">
         <div class="rainbow">~*~ WELCOME TO MY HOMEPAGE ~*~</div>
-        <br>
-        <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--dark);margin-top:4px;">
-          Est. 1997 &nbsp;|&nbsp; Made with ❤️ &amp; MS Paint
-        </div>
+        <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--navy);margin-top:6px;">Est. 1997 &nbsp;|&nbsp; Made with ❤️ &amp; MS Paint</div>
       </div>
-
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
-        <div style="font-size:36px;animation:spin 3s linear infinite">🌀</div>
-        <div style="font-family:'VT323',monospace;font-size:17px;color:var(--dark);line-height:1.5;">
-          Hey there! Welcome to the COOLEST page on the whole internet!! 
-          I made this page because the internet is RAD and I wanted to share 
-          my love of Tamagotchis, Backstreet Boys, and AOL Instant Messenger!! 
-          Don't forget to sign my guestbook and add me to your buddy list! 
-          A/S/L??
-        </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;">
+        <div class="spin" style="font-size:40px;">🌀</div>
+        <div style="font-size:17px;color:var(--navy);line-height:1.5;">HEY THERE!! Welcome to the COOLEST page on the whole internet!! I made this site because the web is totally radical 😎 Don't forget to sign my guestbook + turn up ur speakers!! <b>A/S/L??</b></div>
       </div>
-
       <hr style="border:1px inset var(--gray-dark);margin:8px 0;">
-
-      <div style="display:flex;justify-content:space-between;align-items:center;font-family:'VT323',monospace;font-size:16px;">
-        <div>
-          <div>👾 Tamagotchi fan since '97</div>
-          <div>🎮 Plays: Pokémon Red</div>
-          <div>🎵 Listening to: Spice Girls</div>
-          <div>💌 AIM: xX_CoolKid97_Xx</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:17px;">
+        <div style="line-height:1.8;">
+          <div>🐣 Tamagotchi fan since '96</div>
+          <div>🎮 Playing: Pokémon Red</div>
+          <div>🎵 Listening to: Backstreet Boys</div>
+          <div>💬 AIM: xX_CoolKid97_Xx</div>
         </div>
-        <div style="text-align:center">
-          <div style="font-size:12px;margin-bottom:4px;">Visitors:</div>
-          <div class="hit-counter" id="hit-counter-display">001338</div>
+        <div style="text-align:center;">
+          <div style="font-size:13px;margin-bottom:4px;">Visitors:</div>
+          <div class="hitctr" id="hit-display">001338</div>
         </div>
       </div>
-
       <hr style="border:1px inset var(--gray-dark);margin:8px 0;">
-      <div style="font-family:'VT323',monospace;font-size:14px;color:var(--gray-dark);text-align:center;">
-        <span class="blink">★</span> This page uses FRAMES and JAVASCRIPT <span class="blink">★</span><br>
-        &lt;bgsound src="myspace_song.mid" loop="infinite"&gt;
-      </div>
+      <div style="font-size:14px;color:var(--gray-dark);text-align:center;"><span class="blink">★</span> This page uses FRAMES and JAVASCRIPT <span class="blink">★</span></div>
     </div>
-    <div class="win-statusbar">
-      <div class="status-panel">Done</div>
-      <div class="status-panel">Internet zone</div>
-    </div>
+    <div class="win-status"><div class="sp">Done</div><div class="sp">Internet zone</div></div>
   </div>
 
-  <!-- WINAMP WINDOW -->
+  <!-- MUSIC WINDOW -->
   <div class="win open" id="win-music">
-    <div class="win-titlebar" onmousedown="dragStart(event,'win-music')">
-      <div class="win-title-text">🎵 <span>WINAMP v2.9</span></div>
-      <div class="win-controls">
-        <div class="win-btn" onclick="minWin('win-music')">_</div>
-        <div class="win-btn">□</div>
-        <div class="win-btn" onclick="closeWin('win-music')">✕</div>
-      </div>
+    <div class="win-titlebar" onmousedown="drag(event,'win-music')">
+      <div class="win-title-left">🎵 <span>SoundBlaster Pro</span></div>
+      <div class="win-ctrls"><div class="wcb" onclick="minWin('win-music')">_</div><div class="wcb">□</div><div class="wcb" onclick="closeWin('win-music')">✕</div></div>
     </div>
-    <div class="win-body" style="background:#1a1a1a;color:var(--lime);padding:10px;">
-      <div style="font-family:'VT323',monospace;font-size:14px;color:#888;margin-bottom:4px;">NOW PLAYING:</div>
-      <div style="font-family:'VT323',monospace;font-size:18px;color:var(--lime);white-space:nowrap;overflow:hidden;border:1px inset #333;padding:3px 6px;background:black;margin-bottom:6px;">
-        <span id="track-scroll"></span>
+    <div id="player-wrap">
+      <div id="track-name">[ Press ▶ to play ]</div>
+      <div class="vis-wrap" id="vis"></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-family:'VT323',monospace;font-size:15px;color:#888;">
+        <span class="led" id="led"></span>
+        <span id="play-status">STOPPED</span>
+        <span style="margin-left:auto;" id="play-time">0:00</span>
       </div>
-      <!-- VIS BARS -->
-      <div class="vis-bar-container" id="visualizer"></div>
-      <!-- CONTROLS -->
-      <div style="display:flex;gap:6px;margin-bottom:8px;">
-        <button class="win95-btn" onclick="prevTrack()">⏮</button>
-        <button class="win95-btn" id="play-btn" onclick="togglePlay()">▶</button>
-        <button class="win95-btn" onclick="nextTrack()">⏭</button>
-        <button class="win95-btn" onclick="shuffleTrack()">🔀</button>
+      <div class="player-ctrls">
+        <button class="btn95" onclick="prevTrack()" title="Prev">⏮</button>
+        <button class="btn95" id="play-btn" onclick="togglePlay()">▶</button>
+        <button class="btn95" onclick="nextTrack()" title="Next">⏭</button>
+        <button class="btn95" onclick="shuffleT()" title="Shuffle">🔀</button>
+        <button class="btn95" onclick="stopTrack()" title="Stop">⏹</button>
       </div>
-      <!-- PLAYLIST -->
-      <div style="font-family:'VT323',monospace;font-size:13px;color:#888;border-top:1px solid #333;padding-top:6px;">
-        PLAYLIST:
+      <div id="vol-row">🔈<input type="range" id="vol-slider" min="0" max="100" value="70" oninput="setVol(this.value)">🔊<span id="vol-val">70</span></div>
+      <div style="color:#666;font-family:'VT323',monospace;font-size:13px;margin-bottom:4px;">EQUALIZER:</div>
+      <div id="eq-row">
+        <div class="eq-col"><input type="range" min="-12" max="12" value="0"  id="eq0" oninput="updateEQ()"><label>60Hz</label></div>
+        <div class="eq-col"><input type="range" min="-12" max="12" value="2"  id="eq1" oninput="updateEQ()"><label>250Hz</label></div>
+        <div class="eq-col"><input type="range" min="-12" max="12" value="4"  id="eq2" oninput="updateEQ()"><label>1kHz</label></div>
+        <div class="eq-col"><input type="range" min="-12" max="12" value="2"  id="eq3" oninput="updateEQ()"><label>4kHz</label></div>
+        <div class="eq-col"><input type="range" min="-12" max="12" value="0"  id="eq4" oninput="updateEQ()"><label>16kHz</label></div>
       </div>
-      <div id="playlist" style="font-family:'VT323',monospace;font-size:14px;max-height:90px;overflow-y:auto;"></div>
+      <div style="color:#666;font-family:'VT323',monospace;font-size:13px;border-top:1px solid #333;padding-top:5px;margin-top:5px;">PLAYLIST:</div>
+      <div id="playlist"></div>
     </div>
   </div>
 
-  <!-- GUESTBOOK WINDOW -->
+  <!-- GUESTBOOK -->
   <div class="win open" id="win-guest">
-    <div class="win-titlebar" onmousedown="dragStart(event,'win-guest')">
-      <div class="win-title-text">📖 <span>My Guestbook</span></div>
-      <div class="win-controls">
-        <div class="win-btn" onclick="minWin('win-guest')">_</div>
-        <div class="win-btn">□</div>
-        <div class="win-btn" onclick="closeWin('win-guest')">✕</div>
-      </div>
+    <div class="win-titlebar" onmousedown="drag(event,'win-guest')">
+      <div class="win-title-left">📖 <span>My Guestbook</span></div>
+      <div class="win-ctrls"><div class="wcb" onclick="minWin('win-guest')">_</div><div class="wcb">□</div><div class="wcb" onclick="closeWin('win-guest')">✕</div></div>
     </div>
-    <div class="win-menubar"><span>File</span><span>Sign!</span></div>
+    <div class="win-menu"><span>File</span><span>Sign!</span><span>Help</span></div>
     <div class="win-body">
-      <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--dark);margin-bottom:8px;">✍️ Sign My Guestbook!</div>
+      <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--navy);margin-bottom:8px;">✍️ Sign My Guestbook!</div>
       <input type="text" id="gb-name" placeholder="Your name / AIM handle">
-      <textarea id="gb-msg" placeholder="Leave a message! A/S/L?"></textarea>
-      <button class="win95-btn" onclick="signGuestbook()">Sign It! 🖊️</button>
+      <textarea id="gb-msg" placeholder="Leave a message! A/S/L??"></textarea>
+      <button class="btn95" onclick="signGB()">Sign It! 🖊️</button>
       <hr style="border:1px inset var(--gray-dark);margin:8px 0;">
-      <div id="guestbook-list"></div>
+      <div id="gb-list"></div>
     </div>
   </div>
 
-  <!-- FORTUNE TELLER -->
+  <!-- FORTUNE -->
   <div class="win open" id="win-fortune">
-    <div class="win-titlebar" onmousedown="dragStart(event,'win-fortune')">
-      <div class="win-title-text">🔮 <span>Magic 8 Ball Fortune Teller</span></div>
-      <div class="win-controls">
-        <div class="win-btn" onclick="minWin('win-fortune')">_</div>
-        <div class="win-btn">□</div>
-        <div class="win-btn" onclick="closeWin('win-fortune')">✕</div>
-      </div>
+    <div class="win-titlebar" onmousedown="drag(event,'win-fortune')">
+      <div class="win-title-left">🔮 <span>Magic 8-Ball Fortune.exe</span></div>
+      <div class="win-ctrls"><div class="wcb" onclick="minWin('win-fortune')">_</div><div class="wcb">□</div><div class="wcb" onclick="closeWin('win-fortune')">✕</div></div>
     </div>
     <div class="win-body" style="text-align:center;">
-      <div style="font-size:64px;margin-bottom:8px;cursor:pointer;transition:transform 0.2s;" id="ball" onclick="shakeBall()" title="Click to shake!">🎱</div>
-      <div style="font-family:'VT323',monospace;font-size:14px;color:var(--gray-dark);margin-bottom:6px;">Click the ball to reveal your fortune...</div>
-      <div id="fortune-text" style="font-family:'VT323',monospace;font-size:22px;color:var(--dark);padding:10px;background:white;border:1px inset var(--gray-dark);min-height:60px;display:flex;align-items:center;justify-content:center;">Ask a question first!</div>
+      <div id="ball8" onclick="shakeBall()" style="font-size:64px;cursor:pointer;transition:transform .2s;margin-bottom:6px;">🎱</div>
+      <div style="font-size:14px;color:var(--gray-dark);margin-bottom:8px;">Click the ball to reveal your fate...</div>
+      <div id="fortune-out">Ask a question first!</div>
       <br>
-      <button class="win95-btn" onclick="shakeBall()" style="margin-top:4px;">🔮 Shake Again</button>
+      <button class="btn95" onclick="shakeBall()">🔮 Shake Again</button>
     </div>
   </div>
 
   <!-- ERROR DIALOG -->
-  <div id="error-dlg">
-    <div class="win open" style="width:300px;">
+  <div id="err-dlg">
+    <div class="win open" style="width:310px;">
       <div class="win-titlebar">
-        <div class="win-title-text">⚠️ <span>Fatal Error</span></div>
-        <div class="win-controls">
-          <div class="win-btn" onclick="closeError()">✕</div>
-        </div>
+        <div class="win-title-left">⚠️ <span>Fatal Error</span></div>
+        <div class="win-ctrls"><div class="wcb" onclick="closeErr()">✕</div></div>
       </div>
       <div class="win-body">
-        <div style="display:flex;gap:12px;align-items:flex-start;font-family:'VT323',monospace;font-size:16px;margin-bottom:12px;">
-          <div style="font-size:36px;">⛔</div>
-          <div>
-            <b>Windows has encountered a fatal error.</b><br><br>
-            <span id="error-msg">RECYCLE BIN IS FULL<br>Please empty it and try again.</span><br><br>
-            <span style="font-size:13px;color:var(--gray-dark)">Error code: 0x0000001A 💀</span>
-          </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;font-size:17px;margin-bottom:12px;">
+          <div style="font-size:38px;">⛔</div>
+          <div><b>A fatal exception has occurred.</b><br><br><span id="err-msg">RECYCLE BIN IS FULL<br>Please empty it.</span><br><br><span style="font-size:13px;color:var(--gray-dark)">Error: 0x0000DEAD 💀</span></div>
         </div>
         <div style="display:flex;gap:6px;justify-content:center;">
-          <button class="win95-btn" onclick="closeError()">OK</button>
-          <button class="win95-btn" onclick="closeError()">Cancel</button>
-          <button class="win95-btn" onclick="spawnErrors()">Ignore</button>
+          <button class="btn95" onclick="closeErr()">OK</button>
+          <button class="btn95" onclick="closeErr()">Cancel</button>
+          <button class="btn95" onclick="moreErrors()">Ignore</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- START MENU -->
-  <div id="start-menu">
-    <div class="start-sidebar">Windows 95</div>
-    <div class="start-items">
-      <div class="start-item" onclick="openWin('win-welcome')">🌐 My Homepage</div>
-      <div class="start-item" onclick="openWin('win-music')">🎵 Winamp</div>
-      <div class="start-item" onclick="openWin('win-guest')">📖 Guestbook</div>
-      <div class="start-item" onclick="openWin('win-fortune')">🔮 Fortune Teller</div>
-      <div class="start-divider"></div>
-      <div class="start-item" onclick="toggleMatrix()">💚 Matrix Mode</div>
-      <div class="start-item" onclick="throwError()">💥 Crash Windows</div>
-      <div class="start-divider"></div>
-      <div class="start-item" onclick="toggleStartMenu()">🔌 Shut Down...</div>
-    </div>
-  </div>
-
-</div><!-- end #desktop -->
+</div><!-- /desktop -->
 
 <!-- TASKBAR -->
 <div id="taskbar">
-  <button id="start-btn" onclick="toggleStartMenu()">
-    <span style="font-size:14px">🪟</span> Start
-  </button>
-  <div class="taskbar-item active" id="tb-welcome" onclick="toggleWin('win-welcome')">🌐 Homepage</div>
-  <div class="taskbar-item active" id="tb-music" onclick="toggleWin('win-music')">🎵 Winamp</div>
-  <div class="taskbar-item active" id="tb-guest" onclick="toggleWin('win-guest')">📖 Guestbook</div>
-  <div class="taskbar-item active" id="tb-fortune" onclick="toggleWin('win-fortune')">🔮 Fortune</div>
-  <div id="taskbar-time">12:00</div>
+  <button id="start-btn" onclick="toggleStart()"><span style="font-size:16px">💾</span> Start</button>
+  <div class="tb-btn active" id="tb-home"    onclick="toggleWin('win-home')">🌐 Homepage</div>
+  <div class="tb-btn active" id="tb-music"   onclick="toggleWin('win-music')">🎵 SoundBlaster</div>
+  <div class="tb-btn active" id="tb-guest"   onclick="toggleWin('win-guest')">📖 Guestbook</div>
+  <div class="tb-btn active" id="tb-fortune" onclick="toggleWin('win-fortune')">🔮 Fortune</div>
+  <div id="tb-clock">00:00</div>
+</div>
+
+<!-- START MENU -->
+<div id="start-menu">
+  <div class="sm-sidebar">NetOS 97</div>
+  <div class="sm-items">
+    <div class="sm-item" onclick="openWin('win-home');toggleStart()">🌐 My Homepage</div>
+    <div class="sm-item" onclick="openWin('win-music');toggleStart()">🎵 SoundBlaster</div>
+    <div class="sm-item" onclick="openWin('win-guest');toggleStart()">📖 Guestbook</div>
+    <div class="sm-item" onclick="openWin('win-fortune');toggleStart()">🔮 Fortune.exe</div>
+    <div class="sm-div"></div>
+    <div class="sm-item" onclick="toggleMatrix();toggleStart()">💚 Matrix Mode</div>
+    <div class="sm-item" onclick="crashIt();toggleStart()">💥 Crash System</div>
+    <div class="sm-div"></div>
+    <div class="sm-item" onclick="toggleStart()">🔌 Shut Down...</div>
+  </div>
 </div>
 
 <script>
-// ============ BOOT SEQUENCE ============
-const bootMessages = [
-  'Loading system files...',
-  'Initializing hardware...',
-  'Checking memory... 640K OK',
-  'Loading Windows 95...',
-  'Starting real-mode drivers...',
-  'Initializing device manager...',
-  'Loading explorer.exe...',
-  'Welcome!'
-];
-let bootIdx = 0;
-const fill = document.getElementById('boot-progress-fill');
-const bootTxt = document.getElementById('boot-text');
-function bootStep() {
-  if (bootIdx < bootMessages.length) {
-    bootTxt.textContent = bootMessages[bootIdx];
-    fill.style.width = ((bootIdx + 1) / bootMessages.length * 100) + '%';
-    bootIdx++;
-    setTimeout(bootStep, bootIdx === bootMessages.length ? 600 : 350);
-  } else {
-    document.getElementById('boot-screen').style.transition = 'opacity 0.8s';
-    document.getElementById('boot-screen').style.opacity = '0';
-    setTimeout(() => document.getElementById('boot-screen').style.display = 'none', 800);
-  }
-}
-setTimeout(bootStep, 800);
+'use strict';
 
-// ============ CLOCK ============
-function updateClock() {
-  const now = new Date();
-  const h = now.getHours().toString().padStart(2,'0');
-  const m = now.getMinutes().toString().padStart(2,'0');
-  document.getElementById('taskbar-time').textContent = `${h}:${m}`;
+// ── BOOT ──────────────────────────────────────────────────────
+const bootMsgs=['Checking RAM... 32 MB OK','Loading system drivers...','Initializing SoundBlaster 16...','Detecting network card...','Loading desktop...','Starting NetOS 97...','Welcome!'];
+let bIdx=0;
+const bFill=document.getElementById('boot-fill'), bMsg=document.getElementById('boot-msg');
+function bootStep(){
+  if(bIdx<bootMsgs.length){bMsg.textContent=bootMsgs[bIdx];bFill.style.width=((bIdx+1)/bootMsgs.length*100)+'%';bIdx++;setTimeout(bootStep,bIdx===bootMsgs.length?500:380);}
+  else{const b=document.getElementById('boot');b.style.transition='opacity .8s';b.style.opacity='0';setTimeout(()=>b.style.display='none',800);}
 }
-updateClock(); setInterval(updateClock, 10000);
+setTimeout(bootStep,700);
 
-// ============ HIT COUNTER ============
-let hits = 1338;
-setInterval(() => {
-  hits++;
-  document.getElementById('hit-num').textContent = String(hits).padStart(6,'0');
-  document.getElementById('hit-counter-display').textContent = String(hits).padStart(6,'0');
-}, 15000);
+// ── CLOCK ─────────────────────────────────────────────────────
+function tick(){const n=new Date();document.getElementById('tb-clock').textContent=n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
+tick();setInterval(tick,15000);
 
-// ============ DRAG ============
-let dragging = null, ox=0, oy=0;
-function dragStart(e, id) {
-  dragging = document.getElementById(id);
-  bringToFront(id);
-  ox = e.clientX - dragging.offsetLeft;
-  oy = e.clientY - dragging.offsetTop;
-  document.addEventListener('mousemove', onDrag);
-  document.addEventListener('mouseup', dragEnd);
-}
-function onDrag(e) {
-  if (!dragging) return;
-  dragging.style.left = (e.clientX - ox) + 'px';
-  dragging.style.top  = Math.max(0, e.clientY - oy) + 'px';
-}
-function dragEnd() {
-  dragging = null;
-  document.removeEventListener('mousemove', onDrag);
-  document.removeEventListener('mouseup', dragEnd);
-}
+// ── HIT COUNTER ───────────────────────────────────────────────
+let hits=1338;
+setInterval(()=>{hits++;const s=String(hits).padStart(6,'0');document.getElementById('hit-display').textContent=s;document.getElementById('hit-inline').textContent=s;},18000);
 
-let zTop = 100;
-function bringToFront(id) {
-  document.getElementById(id).style.zIndex = ++zTop;
-}
+// ── DRAG ──────────────────────────────────────────────────────
+let dragEl=null,dOX=0,dOY=0,zTop=100;
+function drag(e,id){dragEl=document.getElementById(id);front(id);dOX=e.clientX-dragEl.offsetLeft;dOY=e.clientY-dragEl.offsetTop;document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);}
+function onMove(e){if(!dragEl)return;dragEl.style.left=(e.clientX-dOX)+'px';dragEl.style.top=Math.max(0,e.clientY-dOY)+'px';}
+function onUp(){dragEl=null;document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);}
+function front(id){document.getElementById(id).style.zIndex=++zTop;}
 
-// ============ WINDOW OPS ============
-function openWin(id) {
-  const w = document.getElementById(id);
-  w.classList.add('open');
-  bringToFront(id);
-  const tbId = 'tb-' + id.replace('win-','');
-  const tb = document.getElementById(tbId);
-  if (tb) tb.classList.add('active');
-}
-function closeWin(id) {
-  document.getElementById(id).classList.remove('open');
-  const tbId = 'tb-' + id.replace('win-','');
-  const tb = document.getElementById(tbId);
-  if (tb) tb.classList.remove('active');
-}
-function minWin(id) { closeWin(id); }
-function toggleWin(id) {
-  const w = document.getElementById(id);
-  if (w.classList.contains('open')) { closeWin(id); } else { openWin(id); }
-}
+// ── WINDOWS ───────────────────────────────────────────────────
+const wMap={'win-home':'tb-home','win-music':'tb-music','win-guest':'tb-guest','win-fortune':'tb-fortune'};
+function openWin(id){const w=document.getElementById(id);w.classList.add('open');front(id);const t=document.getElementById(wMap[id]);if(t)t.classList.add('active');}
+function closeWin(id){document.getElementById(id).classList.remove('open');const t=document.getElementById(wMap[id]);if(t)t.classList.remove('active');}
+function minWin(id){closeWin(id);}
+function toggleWin(id){document.getElementById(id).classList.contains('open')?closeWin(id):openWin(id);}
 
-// ============ START MENU ============
-function toggleStartMenu() {
-  document.getElementById('start-menu').classList.toggle('open');
-}
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('#start-menu') && !e.target.closest('#start-btn')) {
-    document.getElementById('start-menu').classList.remove('open');
-  }
-});
+// ── START MENU ────────────────────────────────────────────────
+function toggleStart(){document.getElementById('start-menu').classList.toggle('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('#start-menu')&&!e.target.closest('#start-btn'))document.getElementById('start-menu').classList.remove('open');});
 
-// ============ MUSIC PLAYER ============
-const tracks = [
-  '01. Backstreet Boys - Everybody',
-  '02. Spice Girls - Wannabe',
-  '03. *NSYNC - Bye Bye Bye',
-  '04. Aqua - Barbie Girl',
-  '05. Savage Garden - Truly Madly',
-  '06. TLC - No Scrubs',
-  '07. Destiny\'s Child - Say My Name',
-  '08. Smash Mouth - All Star',
-];
-let currentTrack = 0;
-let playing = false;
-let visInterval = null;
-let scrollInterval = null;
+// ── AUDIO ENGINE ──────────────────────────────────────────────
+let actx=null,masterGain,eqNodes=[],analyser;
+let visRAF=null,timeRAF=null,isPlaying=false,currentTrackIdx=0;
+let scheduledNodes=[],volume=0.7;
 
-const playlistEl = document.getElementById('playlist');
-tracks.forEach((t,i) => {
-  const div = document.createElement('div');
-  div.id = 'track-' + i;
-  div.textContent = t;
-  div.style.cssText = 'padding:2px 4px;cursor:pointer;color:#888;';
-  div.onclick = () => { currentTrack = i; startPlay(); };
-  playlistEl.appendChild(div);
-});
-
-function highlightTrack() {
-  tracks.forEach((_,i) => {
-    const el = document.getElementById('track-'+i);
-    if (el) el.style.color = i === currentTrack ? '#00ff00' : '#888';
+function initAudio(){
+  if(actx)return;
+  actx=new(window.AudioContext||window.webkitAudioContext)();
+  masterGain=actx.createGain();
+  masterGain.gain.value=volume;
+  const bands=[60,250,1000,4000,16000];
+  let prev=masterGain;
+  bands.forEach((freq,i)=>{
+    const f=actx.createBiquadFilter();
+    f.type=i===0?'lowshelf':i===4?'highshelf':'peaking';
+    f.frequency.value=freq;
+    f.gain.value=parseFloat(document.getElementById('eq'+i).value);
+    eqNodes.push(f);prev.connect(f);prev=f;
   });
+  analyser=actx.createAnalyser();analyser.fftSize=64;
+  prev.connect(analyser);analyser.connect(actx.destination);
+  buildVis();
+}
+function setVol(v){volume=v/100;document.getElementById('vol-val').textContent=v;if(masterGain)masterGain.gain.value=volume;}
+function updateEQ(){eqNodes.forEach((n,i)=>n.gain.value=parseFloat(document.getElementById('eq'+i).value));}
+
+// ── NOTES ─────────────────────────────────────────────────────
+const N={
+  C3:130.8,D3:146.8,E3:164.8,F3:174.6,G3:196,A3:220,B3:246.9,
+  C4:261.6,D4:293.7,E4:329.6,F4:349.2,G4:392,A4:440,B4:493.9,
+  C5:523.3,D5:587.3,E5:659.3,F5:698.5,G5:784,A5:880,B5:987.8,
+  Db4:277.2,Eb4:311.1,Gb4:370,Ab4:415.3,Bb4:466.2,
+  Db5:554.4,Eb5:622.3,Gb5:740,Ab5:830.6,Bb5:932.3,R:0
+};
+
+function seq(arr){let t=0;return arr.map(e=>{const r={...e,start:t};t+=e.dur;return r;});}
+
+// Track 1 – Everybody riff (sq)
+const t1=seq([
+  {f:N.E4,dur:.25},{f:N.E4,dur:.25},{f:N.G4,dur:.25},{f:N.G4,dur:.25},
+  {f:N.A4,dur:.25},{f:N.A4,dur:.25},{f:N.G4,dur:.5},
+  {f:N.F4,dur:.25},{f:N.F4,dur:.25},{f:N.E4,dur:.25},{f:N.E4,dur:.25},
+  {f:N.D4,dur:.25},{f:N.D4,dur:.25},{f:N.C4,dur:.5},
+  {f:N.E4,dur:.25},{f:N.F4,dur:.25},{f:N.G4,dur:.25},{f:N.A4,dur:.25},
+  {f:N.B4,dur:.25},{f:N.A4,dur:.25},{f:N.G4,dur:.5},
+  {f:N.F4,dur:.25},{f:N.E4,dur:.25},{f:N.D4,dur:.25},{f:N.C4,dur:.25},
+  {f:N.D4,dur:.25},{f:N.E4,dur:.25},{f:N.C4,dur:.75},
+].map(e=>({...e,wave:'square',vol:.28})));
+
+// Track 2 – Wannabe riff (saw)
+const t2=seq([
+  {f:N.C5,dur:.2},{f:N.R,dur:.05},{f:N.C5,dur:.2},{f:N.D5,dur:.2},
+  {f:N.E5,dur:.2},{f:N.R,dur:.1},{f:N.G5,dur:.3},
+  {f:N.E5,dur:.2},{f:N.D5,dur:.2},{f:N.C5,dur:.2},{f:N.R,dur:.1},
+  {f:N.A4,dur:.2},{f:N.B4,dur:.2},{f:N.C5,dur:.5},
+  {f:N.G4,dur:.2},{f:N.A4,dur:.2},{f:N.B4,dur:.2},{f:N.C5,dur:.2},
+  {f:N.D5,dur:.2},{f:N.C5,dur:.2},{f:N.B4,dur:.4},
+  {f:N.A4,dur:.2},{f:N.G4,dur:.2},{f:N.A4,dur:.2},{f:N.B4,dur:.2},
+  {f:N.C5,dur:.6},{f:N.R,dur:.2},
+].map(e=>({...e,wave:'sawtooth',vol:.22})));
+
+// Track 3 – All Star riff (sq)
+const t3=seq([
+  {f:N.G4,dur:.2},{f:N.G4,dur:.2},{f:N.A4,dur:.2},{f:N.G4,dur:.2},{f:N.E4,dur:.4},
+  {f:N.G4,dur:.2},{f:N.G4,dur:.2},{f:N.A4,dur:.2},{f:N.G4,dur:.2},{f:N.D5,dur:.4},
+  {f:N.G4,dur:.2},{f:N.G4,dur:.2},{f:N.A4,dur:.2},{f:N.B4,dur:.2},{f:N.G4,dur:.4},
+  {f:N.E4,dur:.2},{f:N.D4,dur:.2},{f:N.C4,dur:.4},{f:N.R,dur:.4},
+  {f:N.C5,dur:.2},{f:N.B4,dur:.2},{f:N.A4,dur:.2},{f:N.G4,dur:.2},{f:N.F4,dur:.4},
+  {f:N.A4,dur:.2},{f:N.G4,dur:.2},{f:N.E4,dur:.6},
+  {f:N.D4,dur:.2},{f:N.E4,dur:.2},{f:N.G4,dur:.2},{f:N.A4,dur:.2},{f:N.G4,dur:.5},
+].map(e=>({...e,wave:'square',vol:.25})));
+
+// Track 4 – Dreamy ballad (sine)
+const t4=seq([
+  {f:N.A4,dur:.5},{f:N.B4,dur:.5},{f:N.C5,dur:.5},{f:N.A4,dur:.5},
+  {f:N.G4,dur:.5},{f:N.A4,dur:.5},{f:N.E4,dur:1},
+  {f:N.F4,dur:.5},{f:N.G4,dur:.5},{f:N.A4,dur:.5},{f:N.F4,dur:.5},
+  {f:N.E4,dur:.5},{f:N.D4,dur:.5},{f:N.C4,dur:1},
+  {f:N.A4,dur:.5},{f:N.C5,dur:.5},{f:N.E5,dur:.5},{f:N.D5,dur:.5},
+  {f:N.C5,dur:.5},{f:N.B4,dur:.5},{f:N.A4,dur:1},
+  {f:N.G4,dur:.5},{f:N.A4,dur:.5},{f:N.B4,dur:.5},{f:N.C5,dur:.5},
+  {f:N.B4,dur:.5},{f:N.A4,dur:.5},{f:N.G4,dur:1},
+].map(e=>({...e,wave:'sine',vol:.3})));
+
+// Track 5 – Upbeat chiptune (saw)
+const t5=seq([
+  {f:N.E5,dur:.2},{f:N.D5,dur:.2},{f:N.C5,dur:.2},{f:N.D5,dur:.2},
+  {f:N.E5,dur:.2},{f:N.C5,dur:.2},{f:N.D5,dur:.4},
+  {f:N.G4,dur:.2},{f:N.A4,dur:.2},{f:N.B4,dur:.2},{f:N.C5,dur:.2},
+  {f:N.D5,dur:.2},{f:N.C5,dur:.2},{f:N.B4,dur:.4},
+  {f:N.E5,dur:.2},{f:N.E5,dur:.2},{f:N.D5,dur:.2},{f:N.C5,dur:.2},
+  {f:N.D5,dur:.2},{f:N.B4,dur:.2},{f:N.C5,dur:.5},
+  {f:N.A4,dur:.2},{f:N.B4,dur:.2},{f:N.C5,dur:.2},{f:N.B4,dur:.2},
+  {f:N.A4,dur:.2},{f:N.G4,dur:.2},{f:N.E4,dur:.5},
+].map(e=>({...e,wave:'sawtooth',vol:.2})));
+
+// Add percussion layer
+function addPerc(track){
+  const dur=track.reduce((m,e)=>Math.max(m,(e.start||0)+e.dur),0);
+  const p=[];
+  for(let t=0;t<dur;t+=0.5){
+    p.push({f:55,dur:.09,start:t,wave:'sine',vol:.55,isPerc:true});
+    if(Math.round(t*10)%10===5)p.push({f:220,dur:.05,start:t+.01,wave:'triangle',vol:.25,isPerc:true});
+  }
+  return [...track,...p];
 }
 
-function startPlay() {
-  playing = true;
-  document.getElementById('play-btn').textContent = '⏸';
-  highlightTrack();
+const TRACKS=[
+  {title:'Backstreet Boyz – Everybody (8-bit)',  notes:addPerc(t1)},
+  {title:'Spice Girlz – Wannabe (chiptune)',     notes:addPerc(t2)},
+  {title:'Smash Mouth – All Star (8-bit)',        notes:addPerc(t3)},
+  {title:'Savage Garden – Truly Madly (synth)',  notes:addPerc(t4)},
+  {title:'Aqua – Barbie Girl (chiptune)',         notes:addPerc(t5)},
+];
+
+// Build playlist UI
+const plEl=document.getElementById('playlist');
+TRACKS.forEach((tr,i)=>{
+  const d=document.createElement('div');
+  d.className='ptrack';d.id='pt'+i;
+  d.textContent=(i+1).toString().padStart(2,'0')+'. '+tr.title;
+  d.onclick=()=>{currentTrackIdx=i;stopTrack();playTrack();};
+  plEl.appendChild(d);
+});
+function hlTrack(){TRACKS.forEach((_,i)=>{const e=document.getElementById('pt'+i);if(e)e.className='ptrack'+(i===currentTrackIdx?' active':'');});}
+
+// ── PLAY ENGINE ───────────────────────────────────────────────
+function playTrack(){
+  initAudio();
+  if(actx.state==='suspended')actx.resume();
+  stopTrack(false);
+  isPlaying=true;
+  const track=TRACKS[currentTrackIdx];
+  hlTrack();
+  document.getElementById('play-btn').textContent='⏸';
+  document.getElementById('play-status').textContent='PLAYING';
+  document.getElementById('led').classList.add('on');
+  const totalDur=track.notes.reduce((m,n)=>Math.max(m,(n.start||0)+n.dur),0);
+  track.notes.forEach(n=>{
+    if(!n.f)return;
+    const osc=actx.createOscillator(),g=actx.createGain();
+    osc.type=n.wave||'square';
+    osc.frequency.value=n.f;
+    if(n.isPerc){osc.frequency.setValueAtTime(n.f,actx.currentTime+n.start);osc.frequency.exponentialRampToValueAtTime(n.f*.5,actx.currentTime+n.start+n.dur);}
+    const vol=(n.vol||.3)*volume;
+    g.gain.setValueAtTime(vol,actx.currentTime+n.start);
+    g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+n.start+n.dur*.9);
+    osc.connect(g);g.connect(masterGain);
+    osc.start(actx.currentTime+n.start);
+    osc.stop(actx.currentTime+n.start+n.dur);
+    scheduledNodes.push(osc);
+  });
+  startScroll(track.title);
+  const loopId=setTimeout(()=>{if(isPlaying){currentTrackIdx=(currentTrackIdx+1)%TRACKS.length;stopTrack();playTrack();}},totalDur*1000+500);
+  scheduledNodes._loopId=loopId;
+  startVis();startTimer(totalDur);
+}
+function stopTrack(resetUI=true){
+  clearTimeout(scheduledNodes._loopId);
+  scheduledNodes.forEach(n=>{try{n.stop(0);}catch(_){}});
+  scheduledNodes=[];
+  cancelAnimationFrame(visRAF);cancelAnimationFrame(timeRAF);
   clearInterval(scrollInterval);
-  let full = '   ' + tracks[currentTrack] + '   ';
-  let pos = 0;
-  document.getElementById('track-scroll').textContent = full;
-  scrollInterval = setInterval(() => {
-    pos = (pos + 1) % full.length;
-    document.getElementById('track-scroll').textContent = full.slice(pos) + full.slice(0, pos);
-  }, 150);
-  startVis();
+  if(resetUI){isPlaying=false;document.getElementById('play-btn').textContent='▶';document.getElementById('play-status').textContent='STOPPED';document.getElementById('led').classList.remove('on');document.getElementById('play-time').textContent='0:00';document.getElementById('track-name').textContent='[ Press ▶ to play ]';}
+}
+function togglePlay(){isPlaying?stopTrack():playTrack();}
+function prevTrack(){currentTrackIdx=(currentTrackIdx-1+TRACKS.length)%TRACKS.length;stopTrack();playTrack();}
+function nextTrack(){currentTrackIdx=(currentTrackIdx+1)%TRACKS.length;stopTrack();playTrack();}
+function shuffleT(){currentTrackIdx=Math.floor(Math.random()*TRACKS.length);stopTrack();playTrack();}
+
+// ── SCROLL ────────────────────────────────────────────────────
+let scrollInterval=null;
+function startScroll(title){
+  clearInterval(scrollInterval);
+  let full='   ★ '+title+'   ★ ',pos=0;
+  const el=document.getElementById('track-name');
+  scrollInterval=setInterval(()=>{el.textContent=full.slice(pos)+full.slice(0,pos);pos=(pos+1)%full.length;},160);
 }
 
-function togglePlay() {
-  playing = !playing;
-  document.getElementById('play-btn').textContent = playing ? '⏸' : '▶';
-  if (playing) { startPlay(); } else { stopVis(); clearInterval(scrollInterval); }
-}
-function prevTrack() { currentTrack = (currentTrack - 1 + tracks.length) % tracks.length; startPlay(); }
-function nextTrack() { currentTrack = (currentTrack + 1) % tracks.length; startPlay(); }
-function shuffleTrack() { currentTrack = Math.floor(Math.random() * tracks.length); startPlay(); }
-
-// Visualizer
-function buildVis() {
-  const vis = document.getElementById('visualizer');
-  vis.innerHTML = '';
-  for (let i = 0; i < 20; i++) {
-    const bar = document.createElement('div');
-    bar.className = 'vis-bar';
-    bar.style.height = '4px';
-    vis.appendChild(bar);
-  }
-}
+// ── VISUALIZER ────────────────────────────────────────────────
+function buildVis(){const v=document.getElementById('vis');v.innerHTML='';for(let i=0;i<24;i++){const b=document.createElement('div');b.className='vbar';b.style.height='4px';v.appendChild(b);}}
 buildVis();
-function startVis() {
-  clearInterval(visInterval);
-  visInterval = setInterval(() => {
-    const bars = document.querySelectorAll('.vis-bar');
-    bars.forEach(b => {
-      b.style.height = (Math.random() * 52 + 4) + 'px';
-    });
-  }, 120);
-}
-function stopVis() {
-  clearInterval(visInterval);
-  document.querySelectorAll('.vis-bar').forEach(b => b.style.height = '4px');
+function startVis(){
+  const bars=document.querySelectorAll('.vbar'),buf=new Uint8Array(analyser.frequencyBinCount);
+  function frame(){analyser.getByteFrequencyData(buf);bars.forEach((b,i)=>{const val=buf[i]||(isPlaying?Math.random()*80+10:0);b.style.height=Math.max(4,val*60/255)+'px';});visRAF=requestAnimationFrame(frame);}
+  frame();
 }
 
-// Auto-start
-setTimeout(() => { startPlay(); }, 2000);
+// ── TIMER ─────────────────────────────────────────────────────
+function startTimer(total){
+  const s0=Date.now();
+  function frame(){const e=(Date.now()-s0)/1000,m=Math.floor(e/60),s=Math.floor(e%60);document.getElementById('play-time').textContent=m+':'+s.toString().padStart(2,'0');if(e<total)timeRAF=requestAnimationFrame(frame);}
+  frame();
+}
 
-// ============ GUESTBOOK ============
-const initialEntries = [
-  { name: 'SkaterBoi99', msg: 'FIRST!! ur site is totally rad!! add me on AIM!! 😎', date: 'Jan 12, 1999' },
-  { name: 'TamagotchiQueen', msg: 'omg i love your site!! backstreet boys 4ever!! 💖', date: 'Mar 3, 1999' },
-  { name: 'xXNightCrawlerXx', msg: 'sup found ur site on webring. coolest page ever!!', date: 'Jul 7, 1999' },
+// ── GUESTBOOK ─────────────────────────────────────────────────
+const initGB=[
+  {name:'SkaterBoi99',msg:'FIRST!! ur site is totally rad!! add me on AIM!! 😎',date:'Jan 12, 1999'},
+  {name:'TamagotchiQueen',msg:'omg i love your site!! backstreet boys 4ever!! 💖',date:'Mar 3, 1999'},
+  {name:'xXNightCrawlerXx',msg:'sup found ur site on webring. coolest page ever!!',date:'Jul 7, 1999'},
 ];
-
-function renderGuestbook(entries) {
-  const list = document.getElementById('guestbook-list');
-  list.innerHTML = '';
-  [...entries].reverse().forEach(e => {
-    const div = document.createElement('div');
-    div.className = 'guestbook-entry';
-    div.innerHTML = `<div class="from">✍️ ${e.name}</div><div class="msg">${e.msg}</div><div class="date">${e.date}</div>`;
-    list.appendChild(div);
+let gbEntries=[...initGB];
+function renderGB(){
+  const el=document.getElementById('gb-list');el.innerHTML='';
+  [...gbEntries].reverse().forEach(e=>{
+    const d=document.createElement('div');d.className='gb-entry';
+    d.innerHTML=`<div class="gb-from">✍️ ${e.name}</div><div class="gb-msg">${e.msg}</div><div class="gb-date">${e.date}</div>`;
+    el.appendChild(d);
   });
 }
-let entries = [...initialEntries];
-renderGuestbook(entries);
-
-function signGuestbook() {
-  const name = document.getElementById('gb-name').value.trim();
-  const msg  = document.getElementById('gb-msg').value.trim();
-  if (!name || !msg) { throwError('Please fill in your name and message!'); return; }
-  entries.push({ name, msg, date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) });
-  renderGuestbook(entries);
-  document.getElementById('gb-name').value = '';
-  document.getElementById('gb-msg').value = '';
-  hits++;
-  document.getElementById('hit-counter-display').textContent = String(hits).padStart(6,'0');
+renderGB();
+function signGB(){
+  const name=document.getElementById('gb-name').value.trim(),msg=document.getElementById('gb-msg').value.trim();
+  if(!name||!msg){showErr('Please fill in your name and message!');return;}
+  gbEntries.push({name,msg,date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})});
+  renderGB();document.getElementById('gb-name').value='';document.getElementById('gb-msg').value='';
 }
 
-// ============ FORTUNE ============
-const fortunes = [
-  'Your Tamagotchi will outlive us all. 🐣',
-  'You will receive a message on AIM tonight... maybe. 💬',
-  'The answer is: IT IS CERTAIN. Press CTRL+ALT+DEL to continue.',
-  'Someone has you on their Top 8. 💖',
-  'Windows will crash before the day is done. (Already true.)',
-  'Your floppy disk has important data. Back it up!!! 💾',
-  'All signs point to: YOU ROCK! 🤘',
-  'Cannot predict now... have you tried turning it off and on again?',
-  'You will find the perfect MP3 on Napster today. 🎵',
-  'My sources say YES. And also: WELCOME TO MYSPACE.',
-  'Concentrate and ask again... after rebooting.',
-  'Outlook not so good. Try defragging your soul.',
-];
-function shakeBall() {
-  const ball = document.getElementById('ball');
-  ball.style.transform = 'scale(0.8) rotate(20deg)';
-  setTimeout(() => {
-    ball.style.transform = 'scale(1.1) rotate(-10deg)';
-    setTimeout(() => {
-      ball.style.transform = 'scale(1) rotate(0)';
-      const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-      document.getElementById('fortune-text').textContent = '🔮 ' + fortune;
-    }, 200);
-  }, 150);
-}
+// ── FORTUNE ───────────────────────────────────────────────────
+const fortunes=['Your Tamagotchi will outlive us all. 🐣','Someone has you on their Top 8. 💖','You will receive an AIM message tonight... maybe.','Cannot predict now — try rebooting your soul.','All signs point to: YOU ROCK! 🤘','My sources say YES. Also: welcome to MySpace.','Outlook not so good. Try defragging your vibes.','You will find the perfect MP3 on Napster today. 🎵','IT IS CERTAIN. Press CTRL+ALT+DEL to continue.','REPLY HAZY — try clearing your cache.','Signs point to YES — and also dial-up internet. 📞','Your floppy disk contains wisdom. Back it up! 💾'];
+function shakeBall(){const b=document.getElementById('ball8');b.style.transform='scale(.8) rotate(20deg)';setTimeout(()=>{b.style.transform='scale(1.1) rotate(-10deg)';setTimeout(()=>{b.style.transform='';document.getElementById('fortune-out').textContent='🔮 '+fortunes[Math.floor(Math.random()*fortunes.length)];},200);},150);}
 
-// ============ ERROR ============
-let errorCount = 0;
-function throwError(msg) {
-  document.getElementById('error-dlg').classList.add('open');
-  document.getElementById('error-msg').innerHTML = msg || 'RECYCLE BIN IS FULL<br>Please empty it and try again.';
-}
-function closeError() {
-  document.getElementById('error-dlg').classList.remove('open');
-  errorCount = 0;
-}
-function spawnErrors() {
-  errorCount++;
-  if (errorCount > 3) {
-    document.getElementById('error-msg').innerHTML = 'TOO MANY ERRORS<br>Please restart your computer.<br><br><b>This is fine. 🔥</b>';
-  } else {
-    const msgs = [
-      'NOT ENOUGH MEMORY<br>Close some programs.',
-      'GENERAL PROTECTION FAULT<br>in module COOLHOMEPAGE.EXE',
-      'ILLEGAL OPERATION<br>You cannot do that on this computer.',
-      'KERNEL PANIC<br>Your vibes are misconfigured.',
-    ];
-    document.getElementById('error-msg').innerHTML = msgs[Math.floor(Math.random()*msgs.length)];
-  }
-}
+// ── ERRORS ────────────────────────────────────────────────────
+let errCount=0;
+const errMsgs=['NOT ENOUGH MEMORY<br>Close some programs.','GENERAL PROTECTION FAULT<br>in module COOLHOMEPAGE.EXE','ILLEGAL OPERATION<br>You cannot do that here.','KERNEL PANIC<br>Your vibes are misconfigured.','TOO MANY ERRORS<br>This is fine. 🔥'];
+function showErr(msg){document.getElementById('err-dlg').classList.add('open');document.getElementById('err-msg').innerHTML=msg||'RECYCLE BIN IS FULL<br>Please empty it.';}
+function closeErr(){document.getElementById('err-dlg').classList.remove('open');errCount=0;}
+function moreErrors(){errCount=Math.min(errCount+1,errMsgs.length-1);document.getElementById('err-msg').innerHTML=errMsgs[errCount];}
+function crashIt(){showErr();}
 
-// ============ MATRIX ============
-let matrixActive = false;
-const canvas = document.getElementById('matrix-canvas');
-const ctx = canvas.getContext('2d');
-let matrixInterval;
-function initMatrix() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-initMatrix();
-window.addEventListener('resize', initMatrix);
-const cols = Math.floor(window.innerWidth / 16);
-const drops = Array(cols).fill(1);
-function drawMatrix() {
-  ctx.fillStyle = 'rgba(0,0,0,0.05)';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = '#00ff00';
-  ctx.font = '14px VT323, monospace';
-  drops.forEach((y,i) => {
-    const char = String.fromCharCode(0x30A0 + Math.random()*96);
-    ctx.fillText(char, i*16, y*16);
-    if (y*16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-    drops[i]++;
-  });
-}
-function toggleMatrix() {
-  matrixActive = !matrixActive;
-  canvas.classList.toggle('active', matrixActive);
-  if (matrixActive) matrixInterval = setInterval(drawMatrix, 50);
-  else { clearInterval(matrixInterval); ctx.clearRect(0,0,canvas.width,canvas.height); }
-  document.getElementById('start-menu').classList.remove('open');
-}
+// ── MATRIX ────────────────────────────────────────────────────
+let matrixOn=false,matrixRAF=null;
+const mc=document.getElementById('matrix'),mx=mc.getContext('2d');
+mc.width=window.innerWidth;mc.height=window.innerHeight;
+const mCols=Math.floor(mc.width/16),drops=Array(mCols).fill(1);
+function drawMatrix(){mx.fillStyle='rgba(0,0,0,.05)';mx.fillRect(0,0,mc.width,mc.height);mx.fillStyle='#00ff41';mx.font='14px VT323,monospace';drops.forEach((y,i)=>{mx.fillText(String.fromCharCode(0x30A0+Math.random()*96),i*16,y*16);if(y*16>mc.height&&Math.random()>.975)drops[i]=0;drops[i]++;});matrixRAF=requestAnimationFrame(drawMatrix);}
+function toggleMatrix(){matrixOn=!matrixOn;mc.classList.toggle('on',matrixOn);if(matrixOn)drawMatrix();else{cancelAnimationFrame(matrixRAF);mx.clearRect(0,0,mc.width,mc.height);}}
+window.addEventListener('resize',()=>{mc.width=window.innerWidth;mc.height=window.innerHeight;});
 </script>
 </body>
 </html>
